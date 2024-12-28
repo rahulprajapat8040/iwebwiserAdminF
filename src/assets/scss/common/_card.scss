@@ -1,0 +1,399 @@
+// @import "./variables";
+
+.card {
+  border: $border;
+  border-radius: $radius-4;
+  color: #333335;
+  width: 100%;
+  box-shadow: $shadow-5;
+  padding: 0rem $fs-9;
+  // margin-bottom: 1rem;
+  margin: 1rem 0;
+
+  // card-header work
+  .card-header {
+    border: none;
+    background-color: $white;
+    .card-title {
+      padding-top: calc($padding - 0.3rem);
+
+      h2 {
+        border-left: 4px solid $secondary;
+        text-transform: uppercase;
+        font-weight: $fw-600;
+        font-size: $fs-9;
+        padding-left: calc($padding - 0.5rem);
+      }
+    }
+  }
+
+  // card body work
+  .card-body {
+    padding: 0 0.5rem;
+
+    // datalist work
+    .form-group {
+      @include flex-between;
+      select,
+      input {
+        border: $input-border;
+        padding: calc($padding - 0.5rem);
+        border-radius: calc($padding - 0.6rem);
+        font-weight: $fw-200;
+      }
+    }
+
+    // login form logo
+    .login_logo {
+      display: flex;
+      justify-content: start;
+      width: 5rem;
+      height: 5rem;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  // card footer work
+  .card-footer {
+    @include flex-between;
+    padding: $padding 0;
+    background-color: $white;
+    p {
+      font-size: $fs-7;
+    }
+    .pagination-div {
+      .page-link {
+        color: $txt-color;
+      }
+    }
+
+    // case study profile page nav link
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      .nav-item {
+        flex: 1;
+        text-align: center;
+        .nav-link {
+          width: 100%;
+          margin: 0;
+          color: $secondary;
+          padding: $btn-padding;
+          &.active {
+            background-color: $secondary;
+            color: $white;
+            padding: $btn-padding;
+          }
+        }
+      }
+    }
+  }
+
+  // admin profile logo
+  .admin_info {
+    margin: 0.5rem 0.3rem;
+    .admin_logo {
+      width: 9rem;
+      height: 9rem;
+      border: 1px solid rgba($color: $primary, $alpha: 0.2);
+      border-radius: 1.6rem;
+      // margin: 0.3rem 0;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 1.6rem;
+        padding: 0.2rem;
+      }
+    }
+  }
+
+  .client_info {
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.4rem;
+
+    // preview case study logo
+    .client_logo {
+      width: 9rem;
+      height: 9rem;
+      border: 1px solid rgba($color: $primary, $alpha: 0.2);
+      border-radius: 1.6rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 1.6rem;
+        padding: 0.2rem;
+      }
+    }
+
+    // preview case study information
+    .profile-info {
+      h2 {
+        font-size: $fs-14;
+        font-weight: $fw-600;
+      }
+      p {
+        font-size: calc($fs-8 - 0.03rem);
+        padding: 0.2rem 0;
+        color: $txt-color;
+      }
+    }
+  }
+
+  // apps row with buttons
+  .app_div {
+    height: 8rem;
+    // width: 13rem;
+    @include flex-center;
+  }
+  .certificate_div {
+    // height: 20rem;
+    padding: $padding;
+    @include flex-center;
+    .certificate_img {
+      width: 4rem;
+      height: 4rem;
+      background-color: pink;
+      img {
+        width: 80%;
+        height: 80%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  // case study challenges and impact images
+  .tab_img {
+    // width: 13rem;
+    // height: 30rem;
+    padding: 0.5rem $padding;
+    margin: auto 0;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  .slogan {
+    font-size: $fs-12;
+    // padding: 1rem 1rem;
+    text-align: left;
+
+    label {
+      font-size: $fs-15;
+      color: $primary;
+    }
+  }
+  .tab_heading {
+    font-size: $fs-15;
+    font-weight: $fw-600;
+    text-align: left;
+    margin: 1rem 0;
+  }
+  .tab_data {
+    // @include flex-center;
+    flex-direction: column;
+    padding: 2rem 0.5rem;
+
+    h3 {
+      font-size: $fs-14;
+      font-weight: $fw-600;
+    }
+    p {
+      font-size: $fs-9;
+      font-weight: $fw-normal;
+      margin: calc($padding - 0.2rem) 0;
+      line-height: 1.5rem;
+    }
+    ul {
+      font-size: $fs-9;
+      font-weight: $fw-normal;
+      margin: calc($padding - 0.2rem) 0;
+      line-height: 1.5rem;
+    }
+  }
+
+  // impact listing division work
+  .impact_div {
+    .list_div {
+      margin: 1rem 0;
+      h3 {
+        // background-color: $secondary;
+        color: $secondary;
+        font-size: $fs-12;
+        padding: $btn-padding;
+      }
+      ul {
+        // margin: 1rem 0;
+        padding-left: 1rem;
+        li {
+          border: 0;
+          padding-left: 1.5rem;
+
+          &::before {
+            // content: "\e5ca";
+            content: "";
+            width: 1rem;
+            height: 1rem;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            // background: url("../img/check.svg");
+            background-position: center;
+            background-origin: content-box;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: $lg) {
+  .card {
+    border: $border;
+    border-radius: $radius-4;
+    color: #333335;
+    width: 100%;
+    box-shadow: $shadow-5;
+    padding: 0rem 0rem;
+
+    // card body work
+    .card-body {
+      padding: 0 1rem;
+    }
+
+    .card-footer {
+      @include flex-between;
+      padding: $padding 0.3rem;
+      background-color: $white;
+      p {
+        font-size: $fs-6;
+      }
+      .pagination-div {
+        .page-link {
+          color: $txt-color;
+          font-size: $fs-6;
+        }
+      }
+
+      // case study profile page nav link
+      .nav-pills {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        .nav-item {
+          flex: 1 0 100%; // Each item takes full width on small screens
+          text-align: left;
+        }
+      }
+    }
+
+    // admin profile work start here
+    .admin_info {
+      margin: 0.5rem 0.3rem;
+
+      // admin image
+      .admin_logo {
+        width: 4rem;
+        height: 4rem;
+        border: 1px solid rgba($color: $primary, $alpha: 0.2);
+        border-radius: 1rem;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 1rem;
+          padding: 0.2rem;
+        }
+      }
+
+      // admin name and email address
+      .profile-info {
+        margin-left: 1rem;
+        h2 {
+          font-size: $fs-8;
+        }
+        p {
+          display: flex;
+          align-items: center;
+          font-size: 0.65rem;
+          svg {
+            width: 10px;
+            height: 10px;
+            margin-right: 0.2rem;
+          }
+        }
+      }
+
+      // edit and change Password button
+      .action_btn {
+        svg {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+    // admin profile work end here
+
+    // case study preview page work
+    .client_info {
+      flex-direction: column;
+      align-items: flex-start;
+
+      // preview case study logo
+      .client_logo {
+        width: 9rem;
+        height: 9rem;
+        border: 1px solid rgba($color: $primary, $alpha: 0.2);
+        border-radius: 1.6rem;
+        margin-bottom: 0.5rem;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          border-radius: 1.6rem;
+          padding: 0.2rem;
+        }
+      }
+
+      // preview case study information
+      .profile-info {
+        margin-bottom: 0.5rem;
+        h2 {
+          font-size: $fs-14;
+          font-weight: $fw-600;
+        }
+        p {
+          font-size: calc($fs-8 - 0.03rem);
+          padding: 0.2rem 0;
+          color: $txt-color;
+        }
+      }
+    }
+
+    .tab-pane {
+      .card {
+        width: 100%;
+      }
+    }
+    // apps row with buttons
+    .app_div {
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 1rem 0;
+      height: 10rem;
+      margin: 0 auto;
+      .btn {
+        font-size: calc($fs-8 - 0.1rem);
+      }
+    }
+  }
+}

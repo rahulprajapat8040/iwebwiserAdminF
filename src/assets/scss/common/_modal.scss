@@ -1,0 +1,64 @@
+@import "./variables";
+
+#viewModal {
+  .modal_body {
+    img {
+      width: 10rem;
+      height: 10rem;
+    }
+  }
+}
+
+#editModal,
+#editModal1,
+#editModal2,
+#editModal3 {
+  // position: absolute;
+  // left: -5%;
+  // top: -20%;
+  .modal-body {
+    .upload-input {
+      border: $border-2;
+      width: 100%;
+      border-radius: 1rem;
+      color: rgba($color: $placeholder-color, $alpha: 1.0);
+      font-size: $placeholder-font;
+    }
+    .form-textbox {
+      font-size: 1rem;
+    }
+  }
+}
+
+#viewModal,
+#viewModal1,
+#viewModal2 {
+  .blog_img{
+    img {
+      height: 14rem;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+  
+}
+.modal-title {
+  font-size: $fs-12;
+  font-weight: 600;
+}
+.del_modal,
+.cancel_modal,
+.view_modal {
+  font-size: $fs-8;
+  padding: 0.5rem 1.5rem;
+}
+.add_modal {
+  font-size: $fs-8;
+  background-color: $secondary;
+  color: $white;
+  padding: 0.5rem 1.5rem;
+}
+.add_modal:hover {
+  background-color: rgba($color: $secondary, $alpha: 0.8);
+  color: $white;
+}

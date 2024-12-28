@@ -1,0 +1,44 @@
+@import "./variables";
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  ol {
+    @include flex-center;
+  }
+  li a {
+    font-size: calc($fs-9 - 0.05rem);
+    font-weight: $fw-normal;
+    color: rgba($color: $txt-color, $alpha: 0.7);
+    text-decoration: none;
+  }
+  .active {
+    color: rgba($color: $secondary, $alpha: 1);
+  }
+}
+
+@media only screen and (max-width: $x-sm) {
+  .breadcrumb{
+    li a{
+      font-size: $fs-8;
+    }
+    .active {
+      color: rgba($color: $secondary, $alpha: 1);
+      font-size: $fs-8;
+    }
+  }
+}
+
+// media query for screen size between 576px and 992px
+@media (min-width: $x-sm) and (max-width: $lg) {
+  .breadcrumb{
+    li a{
+      font-size: $fs-9;
+    }
+    .active {
+      color: rgba($color: $secondary, $alpha: 1);
+      font-size: $fs-9;
+    }
+  }
+}

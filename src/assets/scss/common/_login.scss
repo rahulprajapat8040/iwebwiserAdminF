@@ -1,0 +1,45 @@
+@import "./variables";
+
+// login work
+.form_section {
+  padding: 6rem 0;
+
+  .login_title {
+    font-size: $fs-15;
+    font-weight: $fw-500;
+    margin-top: 1rem;
+  }
+
+  #loginEmail::placeholder,
+  #loginPass::placeholder,
+  #confirmPass::placeholder,
+  #newPass::placeholder {
+    color: $placeholder-color;
+    font-size: $placeholder-font;
+    padding: 0;
+  }
+  .pass_input {
+    position: relative;
+    a {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(-10px, 8px);
+    }
+  }
+}
+
+@media only screen and (max-width: $lg) {
+  .form_section {
+    padding: 7.2rem 0;
+    .pass_input {
+      position: relative;
+      a {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(-6px, 4px);
+      }
+    }
+  }
+}

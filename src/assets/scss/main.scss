@@ -1,0 +1,19 @@
+@import "./common/variables";
+@import "./common/base";
+@import "./common/mixins";
+
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oswald:wght@200..700&family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+@import "./common/form-input";
+@import "./common/button";
+@import "./common/card";
+@import "./common/table";
+@import "./common/breadcrumb";
+
+@import "./common/header";
+@import "./common/sidebar";
+
+@import "./common/dashboard-base";
+@import "./common/login.scss";
+@import "./common/modal";
+@import "./common/badge";

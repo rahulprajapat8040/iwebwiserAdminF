@@ -1,0 +1,93 @@
+// colors
+
+$primary: hsl(0, 0%, 0%);
+$secondary: #0029ff;
+
+$txt-color: #5d6d7e;
+$white: #ffffff;
+$border-textbox: #e4e4e6;
+$upload-border: 1px solid #cecee1;
+
+$background-color:#f2f4ffbf;
+
+$blue: #0029ff;
+$blue-900: #2649ff;
+$blue-800: #3f5eff;
+$blue-700: #7f94ff;
+$blue-600: #bfc9ff;
+$blue-500: #e5e9ff;
+$blue-400: #f2f4ff;
+
+$red: #ff0029;
+$red-900: #ff2649;
+$red-800: #ff3f5e;
+$red-700: #ff7f94;
+$red-600: #ffbfc9;
+
+// font family
+$font-family: "Poppins", serif;
+
+// placeholder 
+$placeholder-color: #818889;
+$placeholder-font: 12px;
+
+// font size
+$fs-5: 0.5rem;
+$fs-6: 0.6rem;
+$fs-7: 0.7rem;
+$fs-8: 0.813rem;
+$fs-9: 0.9rem;
+$fs-base: 1rem;
+$fs-12: 1.2rem;
+$fs-13: 1.3rem;
+$fs-14: 1.4rem;
+$fs-15: 1.5rem;
+
+$fw-200: 200;
+$fw-300: 300;
+$fw-normal: 400;
+$fw-500: 500;
+$fw-600: 600;
+$fw-700: 700;
+$lh-normal: normal;
+$lh-15: 1.5rem;
+
+// border radius
+$radius-2: 0.2rem;
+$radius-4: 0.4rem;
+$radius-5: 0.5rem;
+$radius-1: 1rem;
+$radius-8: 1.8rem;
+
+// margin and padding
+$margin: 1.2rem;
+$padding: 1rem;
+$btn-padding: 0.5rem 1.5rem;
+
+// box shadow
+$card-shadow: 2px 2px 9px rgba(154, 154, 204, 0.1);
+$shadow-1: 0 7px 26px rgba(191, 191, 214, 0.3);
+$shadow-4: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+  rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+$shadow-5: rgba(127, 148, 255, 0.4) 0px 3px 8px;
+
+// border
+$border: 1px solid #eeeff4;
+$border-1: 1px solid rgb(242, 242, 242);
+$border-2: 1px solid rgb(238, 238, 247);
+$input-border: 1px solid #e4e4e6;
+
+
+// grid breakpoints
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+
+// screen size 
+$x-sm: 576px;
+$lg: 992px;

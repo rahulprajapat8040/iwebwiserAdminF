@@ -1,0 +1,281 @@
+@import "./variables";
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 15rem;
+  right: 0;
+  box-shadow: $shadow-1;
+  z-index: 1;
+  height: 4.75rem;
+  background-color: $white;
+
+  transition: all 0.35s linear;
+  -webkit-transition: all 0.35s linear;
+  -moz-transition: all 0.35s linear;
+  -ms-transition: all 0.35s linear;
+  -o-transition: all 0.35s linear;
+
+  .form-inputs {
+    position: relative;
+    svg {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+  }
+  .form-control {
+    width: 30rem;
+    border-radius: 4px;
+    padding: 0.3rem 0.5rem;
+  }
+  .form-control::placeholder{
+    color: $placeholder-color;
+    font-size: $placeholder-font;
+  }
+  .right-head {
+    display: flex;
+    align-items: center;
+  }
+
+  .dropdown-toggle::after {
+    display: none !important;
+  }
+
+  .dropdown-toggle:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  .dropdown-toggle:active {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .admin_img {
+    width: 2rem;
+    height: 2rem;
+    img {
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .admin_details {
+    text-align: left;
+    p {
+      font-size: $fs-8;
+      color: $txt-color;
+      font-weight: 600;
+    }
+    span {
+      font-size: $fs-7;
+      font-weight: 500;
+      color: #7b8191;
+    }
+  }
+
+  .badge {
+    position: absolute;
+    border-radius: 50%;
+    right: 0.1rem;
+    top: 0.1rem;
+    font-size: $fs-6;
+  }
+  .dropdown-menu {
+    padding: 0;
+    font-weight: 400;
+
+    li {
+      font-size: $fs-8;
+      border-bottom: 1px solid rgba($color: $txt-color, $alpha: 0.2);
+      padding: 0;
+      a {
+        padding: 0.6rem 0.5rem;
+      }
+    }
+    li:hover {
+      a {
+        color: $secondary;
+        background-color: rgba($color: $blue-500, $alpha: 0.6);
+
+        #profile,
+        #signout {
+          path {
+            fill: $secondary;
+          }
+        }
+      }
+    }
+
+    .admin_profile {
+      .dropdown-menu a {
+        font-size: $fs-7;
+        font-weight: 500;
+      }
+    }
+    .dropdown_head {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 1rem;
+      border-bottom: 1px solid rgba($color: $txt-color, $alpha: 0.2);
+      h3 {
+        font-size: 1.0625;
+        font-weight: 500;
+      }
+      span {
+        font-size: $fs-6;
+        font-weight: 600;
+        padding: 0rem 0.55rem;
+        border-radius: 0.25rem;
+      }
+    }
+
+    .dropdown_content {
+      position: relative;
+      max-height: 300px;
+      width: 18rem;
+      overflow: hidden;
+      padding-bottom: 50px;
+
+      .not_icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .dropdown_scroll {
+        max-height: 250px;
+        overflow-y: auto;
+      }
+
+      // notification dropdown work
+      .dropdown_scroll::-webkit-scrollbar {
+        background-color: #fff;
+        width: 14px;
+      }
+
+      .dropdown_scroll::-webkit-scrollbar-track {
+        background-color: #fff;
+      }
+
+      .dropdown_scroll::-webkit-scrollbar-track:hover {
+        background-color: #f4f4f4;
+      }
+
+      .dropdown_scroll::-webkit-scrollbar-thumb {
+        background-color: #cdcdce;
+        border-radius: 16px;
+        border: 5px solid #fff;
+      }
+
+      .dropdown_scroll::-webkit-scrollbar-thumb:hover {
+        background-color: #b5b5ba;
+        border: 4px solid #f4f4f4;
+      }
+
+      .dropdown_scroll::-webkit-scrollbar-button {
+        display: none;
+      }
+
+      .alert {
+        padding: 0;
+        margin: 0.2rem;
+        width: 100%;
+        text-align: left;
+        p {
+          font-size: $fs-7;
+          color: $txt-color;
+          font-weight: 500;
+        }
+        span {
+          font-size: $fs-6;
+          font-weight: 400;
+          color: #7b8191;
+        }
+      }
+    }
+
+    // dropdown footer
+    .dropdown_footer {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+
+      transform: translateX(-50%);
+      width: 90%;
+      // padding: 0.4rem;
+
+      button {
+        background-color: $secondary;
+        color: $white;
+        font-size: $fs-7;
+      }
+    }
+  }
+
+  // when header is active
+  &.active {
+    left: 6rem;
+    transition: all 0.35s linear;
+    -webkit-transition: all 0.35s linear;
+    -moz-transition: all 0.35s linear;
+    -ms-transition: all 0.35s linear;
+    -o-transition: all 0.35s linear;
+  }
+}
+
+@media only screen and (max-width: $lg) {
+  .header {
+    left: 0rem !important;
+    transition: all 0.35s linear;
+    -webkit-transition: all 0.35s linear;
+    -moz-transition: all 0.35s linear;
+    -ms-transition: all 0.35s linear;
+    -o-transition: all 0.35s linear;
+
+
+    // header logo work 
+    .header_logo{
+      img{
+        width: 55px;
+        height: 42px;
+      }
+    }
+    // admin image in header 
+    .admin_img {
+      width: 1.5rem;
+      height: 1.5rem;
+      img {
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+   
+    // notification button work
+  .notification{
+    svg{
+      width: 18px;
+      height: 18px;
+    }
+    .dropdown-menu{
+      transform: translate(70px);
+    }
+  }
+    
+
+    // when header is active
+    &.active {
+      left: 0rem;
+      transition: all 0.35s linear;
+      -webkit-transition: all 0.35s linear;
+      -moz-transition: all 0.35s linear;
+      -ms-transition: all 0.35s linear;
+      -o-transition: all 0.35s linear;
+    }
+  }
+}

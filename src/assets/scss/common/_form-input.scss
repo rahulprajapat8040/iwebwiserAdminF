@@ -1,0 +1,96 @@
+@import "./variables";
+
+.upload-form {
+  .form-group {
+    margin: 2rem 0;
+
+    // form label work
+    .form-label {
+      font-size: $fs-8;
+    }
+
+    // form input work
+    .form-input {
+      font-size: $fs-8;
+      border-radius: 0.35rem;
+      color: #7987a1;
+      height: 2.6rem;
+    }
+
+    // form textbox work
+    .form-textbox {
+      font-size: $fs-8;
+      line-height: 1.6;
+      border-radius: 0.35rem;
+      padding: $padding $padding;
+      color: #7987a1;
+      height: 6rem;
+    }
+
+    .upload-input {
+      border: $upload-border;
+      border-radius: 0.35rem;
+      margin: 0rem 0;
+      .form-img-uploader {
+        cursor: pointer;
+        padding: 0.3rem $padding;
+        svg,
+        p {
+          opacity: 0.5;
+        }
+      }
+    }
+
+    // placeholder color and font size
+    .form-input::placeholder,
+    .form-textbox::placeholder,
+    #header-link {
+      color: $placeholder-color;
+      font-size: $placeholder-font;
+    }
+
+    // input focus work
+    .form-textbox:focus,
+    .form-input:focus {
+      outline-width: 0 !important;
+      box-shadow: none;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+      border: 1px solid #e4e4e6;
+    }
+  }
+}
+
+
+@media only screen and (max-width: $lg) {
+  .upload-form {
+    .form-group {
+      margin: 1rem 0;
+      .form-label {
+        font-size: $fs-8;
+      }
+
+      .form-input {
+        font-size: $fs-8;
+        height: calc($padding * 2);
+        border-radius: 0.35rem;
+        padding: $padding $padding;
+        color: #7987a1;
+      }
+    }
+  }
+ 
+}
+
+@media only screen and (max-width: $x-sm) {
+  .data-form{
+    .form-group{
+      select{
+        width: 5.35rem;
+        height: 2rem;
+        font-size: 0.7rem;
+        background-color: $white;
+      }
+    }
+  }
+}
