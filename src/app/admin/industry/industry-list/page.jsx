@@ -101,6 +101,15 @@ const IndustryList = () => {
     setSearchTimeout(timeoutId);
   };
 
+  // Add this helper function to truncate HTML content
+  const truncateHTML = (html, maxLength) => {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    const text = div.textContent || div.innerText || '';
+    if (text.length <= maxLength) return html;
+    return text.substring(0, maxLength) + '...';
+  };
+
   return (
     <>
       <EditIndustry
@@ -145,7 +154,7 @@ const IndustryList = () => {
                 className="card-title d-flex justify-content-between align-items-center"
               >
                 <h2>Industry List</h2>
-                <Link href="/admin/industries/add-industries" className="btn sub_btn">ADD</Link>
+                <Link href="/admin/industry/add-industry" className="btn sub_btn">ADD</Link>
               </div>
               <div className="my-3 d-flex align-items-center justify-content-between">
                 <Form.Select
@@ -177,7 +186,6 @@ const IndustryList = () => {
                       <th>Title</th>
                       <th>Description</th>
                       <th>Button Link</th>
-                      <th>Services</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -199,9 +207,12 @@ const IndustryList = () => {
                             />
                           </td>
                           <td>{item.title}</td>
-                          <td>{item.description.substring(0, 20) + (item.description[20] ? "...." : "")}</td>
+                          <td>
+                            <div dangerouslySetInnerHTML={{ 
+                              __html: truncateHTML(item.description, 20)
+                            }} />
+                          </td>
                           <td>{item.button_link}</td>
-                          <td>{item.services}</td>
                           <td>
                             <div className="d-flex align-items-center justify-content-center gap-2">
                               <div
@@ -248,9 +259,12 @@ const IndustryList = () => {
                             />
                           </td>
                           <td>{item.title}</td>
-                          <td>{item.description.substring(0, 20) + (item.description[20] ? "...." : "")}</td>
-                          <td>{item.button_link}</td>
-                          <td>{item.services}</td>
+                          <td>
+                            <div dangerouslySetInnerHTML={{ 
+                              __html: truncateHTML(item.description, 20)
+                            }} />
+                          </td>
+                          <td>{item.button_link || "--"}</td>
                           <td>
                             <div className="d-flex align-items-center justify-content-center gap-2">
                               <div

@@ -22,10 +22,9 @@ export const getAllServices = createAsyncThunk(
 
 export const getAllServicesFull = createAsyncThunk(
   "getAllServicesFull",
-  async ({ search, service_id }, { rejectWithValue }) => {
+  async () => {
     try {
       const response = await axios.get(Apis.getAllServicesFull, {
-        params: { search, service_id },
       });
       return {
         services: response.data.data.services,
@@ -33,7 +32,6 @@ export const getAllServicesFull = createAsyncThunk(
       };
     } catch (error) {
       console.error(error);
-      return rejectWithValue(error.response.data);
     }
   }
 );

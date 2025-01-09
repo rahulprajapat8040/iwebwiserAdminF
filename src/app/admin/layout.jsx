@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
               scrollbarWidth: "none",
             }}
           >
-            <h6 className="text-end text-capitalize text-primary">
+            <h6 className="text-end d-none d-md-block text-capitalize text-primary">
               {pathname.split("/").slice(2).join(" / ")}
             </h6>
             <div>{children}</div>

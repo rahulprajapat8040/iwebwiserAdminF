@@ -3,7 +3,7 @@ import Logo from "@/assets/img/iweblogo.jpg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 // icons
-import { IoHomeOutline } from "react-icons/io5";
+import { IoHomeOutline , IoCodeSlash } from "react-icons/io5";
 import { TbLayoutNavbarFilled } from "react-icons/tb";
 import { RxSection } from "react-icons/rx";
 import { CiShare2, CiUser } from "react-icons/ci";
@@ -34,15 +34,6 @@ const AdminDrawer = () => {
   };
 
   const menuItems = [
-    {
-      title: "Header",
-      link: "/admin/header/add-header",
-      icon: <TbLayoutNavbarFilled size={25} />,
-      subItems: [
-        { title: "Add Heading", link: "/admin/header/add-header" },
-        { title: "Heading List", link: "/admin/header/navbar-list" },
-      ],
-    },
     {
       title: "Banner",
       link: "/admin/banner/add-banner",
@@ -107,13 +98,32 @@ const AdminDrawer = () => {
       ],
     },
     {
+      title: "Fields",
+      link: "/admin/field/add-field",
+      icon: <IoCodeSlash size={25} />,
+      subItems: [
+        { title: "Add Field", link: "/admin/field/add-field" },
+        { title: "Field List", link: "/admin/field/field-list" },
+      ],
+    },
+    {
       title: "Services",
       link: "/admin/services/add-service",
       icon: <RiUserSettingsLine size={25} />,
       subItems: [
         { title: "Service List", link: "/admin/services/service-list" },
+        { title: "Sub Service", link: "/admin/services/sub-service-list" },
         { title: "Service Faq List", link: "/admin/services/faq-list" },
-        {title: "Sub Service", link: "/admin/services/sub-service-list"},
+        { title: "Service Details", link: "/admin/services/service-detail-list" },
+      ],
+    },
+    {
+      title: "Setps",
+      link: "/admin/setps/add-setp",
+      icon: <RiUserSettingsLine size={25} />,
+      subItems: [
+        {title: "Add Setp", link: "/admin/steps/add-steps"},
+        { title: "Setp List", link: "/admin/setps/setp-list" },
       ],
     },
     {
@@ -197,7 +207,7 @@ const AdminDrawer = () => {
           alt="logo"
         />
         {showDrawer && (
-          <h2 className="m-0 text-muted fw-semibold" style={{fontSize: "1.2rem"}}>iWebWiser</h2>
+          <h2 className="m-0 text-muted fw-semibold" style={{ fontSize: "1.2rem" }}>iWebWiser</h2>
         )}
       </div>
       <div
@@ -280,8 +290,8 @@ const AdminDrawer = () => {
                         key={subIndex}
                         href={subItem.link}
                         className={`d-flex align-items-center mb-3 gap-2 ${isActive(subItem.link)
-                            ? "text-primary"
-                            : "text-secondary"
+                          ? "text-primary"
+                          : "text-secondary"
                           }`}
                         style={{ fontSize: "13px" }}
                       >

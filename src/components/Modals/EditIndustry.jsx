@@ -6,22 +6,25 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Apis } from "@/utils/Apis";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllIndustry } from "@/lib/redux/features/GetAllIndustry";
+import { Editor } from "@tinymce/tinymce-react";
+
 const EditIndustry = ({ show, setShowEdit, selectedIndustry }) => {
   const dispatch = useDispatch();
+  const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
+    setIsClient(true);
     setTitle(selectedIndustry?.title || "");
     setdescription(selectedIndustry?.description || "");
     setButtonLink(selectedIndustry?.button_link || "");
-    setService(selectedIndustry?.services || "");
     setIndustryImage(selectedIndustry?.image || "");
   }, [selectedIndustry]);
 
   const [title, setTitle] = useState(selectedIndustry?.title);
   const [description, setdescription] = useState(selectedIndustry?.description);
   const [buttonLink, setButtonLink] = useState(selectedIndustry?.button_link);
-  const [services, setService] = useState(selectedIndustry?.services);
   const [industryImage, setIndustryImage] = useState(selectedIndustry?.image);
 
   // HANDLE IMAGE UPLOAD
@@ -52,14 +55,15 @@ const EditIndustry = ({ show, setShowEdit, selectedIndustry }) => {
           image: industryImage,
           description: description,
           button_link: buttonLink,
-          services: services,
         }
       );
-      dispatch(getAllIndustry({ page: 1, limit:10, showAll: false }));
-      // Clear the input fields and increment the index for the next branch
+      dispatch(getAllIndustry({ page: 1, limit: 10, showAll: false }));
       setShowEdit(false);
+      // Clear all fields
       setTitle("");
       setIndustryImage("");
+      setdescription("");
+      setButtonLink("");
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +72,7 @@ const EditIndustry = ({ show, setShowEdit, selectedIndustry }) => {
   return (
     <Modal size="md" centered show={show} onHide={() => setShowEdit(!show)}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit Industy</Modal.Title>
+        <Modal.Title>Edit Industry</Modal.Title>
       </Modal.Header>
       <Modal.Body className="py-5">
         <Form className="py-5">
@@ -85,19 +89,31 @@ const EditIndustry = ({ show, setShowEdit, selectedIndustry }) => {
               required
             />
           </Form.Group>
-          <Form.Group className="mb-4  d-flex align-items-center">
+          <Form.Group className="mb-4 d-flex align-items-center">
             <Form.Label className={`w-25 m-0 ${styles.mdFont}`}>
               Industry Description
             </Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={5}
-              placeholder="Enter Service Title"
-              value={description}
-              onChange={(e) => setdescription(e.target.value)}
-              className={`flex-grow-1 p-2 w-75 ${styles.mdFont}`}
-              required
-            />
+            <div className="w-75">
+              {isClient && (
+                <Editor
+                  apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                  value={description}
+                  init={{
+                    height: 250,
+                    menubar: false,
+                    plugins: [
+                      'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                      'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                      'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                    ],
+                    toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                      'alignleft aligncenter alignright alignjustify | ' +
+                      'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                  }}
+                  onEditorChange={(content) => setdescription(content)}
+                />
+              )}
+            </div>
           </Form.Group>
           <Form.Group className="mb-4 d-flex align-items-center">
             <Form.Label className={`w-25 m-0 ${styles.mdFont}`}>
@@ -108,19 +124,6 @@ const EditIndustry = ({ show, setShowEdit, selectedIndustry }) => {
               placeholder="Enter Service Title"
               value={buttonLink}
               onChange={(e) => setButtonLink(e.target.value)}
-              className={`flex-grow-1 p-2 w-75 ${styles.mdFont}`}
-              required
-            />
-          </Form.Group>
-          <Form.Group className="mb-4 d-flex align-items-center">
-            <Form.Label className={`w-25 m-0 ${styles.mdFont}`}>
-              Sub Service
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter Service Title"
-              value={services}
-              onChange={(e) => setService(e.target.value)}
               className={`flex-grow-1 p-2 w-75 ${styles.mdFont}`}
               required
             />

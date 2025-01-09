@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { Editor } from "@tinymce/tinymce-react";
 
 const UpdateCaseStudy = () => {
     const router = useRouter();
@@ -20,6 +21,11 @@ const UpdateCaseStudy = () => {
     const dispatch = useDispatch();
     const [phases, setPhases] = useState([{ title: "", features: [""] }]);
     const [industries, setIndustries] = useState([])
+    const [isClient, setIsClient] = useState(false);
+    const [additionalInfo, setAdditionalInfo] = useState([
+        { title: '', description: '' }
+    ]);
+    const [slug, setSlug] = useState('');
 
     const fetchIndustries = async () => {
         try {
@@ -39,12 +45,14 @@ const UpdateCaseStudy = () => {
     const [caseStudy, setCaseStudy] = useState({
         productName: "",
         productSlogan: "",
-        description: "",
+        short_description: "",
+        full_description: "",
         country: "",
         platformUsers: "",
         downloads: "",
         buttonLinks: [""],
         image: "",
+        mainImage: "",
     });
 
     console.log(caseStudy.productName)
@@ -70,6 +78,10 @@ const UpdateCaseStudy = () => {
         }
     }, [id, dispatch]);
 
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
     const fetchCaseStudyById = async (id) => {
         try {
             const response = await axios.get(`${Apis.getCaseStudyById}/${id}`);
@@ -80,6 +92,8 @@ const UpdateCaseStudy = () => {
             setAddImpact(data.impact);
             setPhases(data.system_phase);
             setSelectedIndustry(data.industryId);
+            setSlug(data.slug);
+            setAdditionalInfo(data.addtional_information || [{ title: '', description: '' }]);
         } catch (error) {
             console.error("Error fetching case study:", error);
         }
@@ -151,6 +165,23 @@ const UpdateCaseStudy = () => {
         setPhases(updatedPhases);
     };
 
+    // Add handlers for additional info
+    const addAdditionalInfo = () => {
+        setAdditionalInfo([...additionalInfo, { title: '', description: '' }]);
+    };
+
+    const removeAdditionalInfo = (index) => {
+        const updatedInfo = [...additionalInfo];
+        updatedInfo.splice(index, 1);
+        setAdditionalInfo(updatedInfo);
+    };
+
+    const handleAdditionalInfoChange = (index, field, value) => {
+        const updatedInfo = [...additionalInfo];
+        updatedInfo[index][field] = value;
+        setAdditionalInfo(updatedInfo);
+    };
+
     // HANDLE UPLOAD CERTIFICATE IMAGES  
     const handleFileChange = async (e) => {
         const files = e.target.files;
@@ -201,10 +232,37 @@ const UpdateCaseStudy = () => {
                 ...prevCaseStudy,
                 image: uploadedImageUrl,
             }));
+            console.log(response)
             toast.success("Case study image uploaded successfully");
 
         } catch (error) {
             console.error('Error uploading file:', error);
+        }
+    }
+
+    const handleMainImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await axios.post(`${Apis.uploadFile}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            const uploadedImageUrl = response.data.url; // Extract URL from the response data
+            setCaseStudy((prevCaseStudy) => ({
+                ...prevCaseStudy,
+                mainImage: uploadedImageUrl,
+            }));
+            toast.success("Case study image uploaded successfully");
+
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            // Handle error appropriately
         }
     }
 
@@ -278,6 +336,13 @@ const UpdateCaseStudy = () => {
         }));
     };
 
+    const removeMainImage = () => {
+        setCaseStudy((prevCaseStudy) => ({
+            ...prevCaseStudy,
+            mainImage: "",
+        }));
+    };
+
     const removeChallengesImage = () => {
         setChallenges((prevChallenges) => ({
             ...prevChallenges,
@@ -297,12 +362,14 @@ const UpdateCaseStudy = () => {
         e.preventDefault();
         try {
             const res = await axios.put(`${Apis.updateCaseStudy}/${id}`, {
+                slug: slug,
                 addCaseStudy: caseStudy,
                 userCertificate: userCertificate,
                 challenges: Challenges,
                 impact: addImpact,
                 system_phase: phases,
                 industryId: selectedIndustry,
+                addtional_information: additionalInfo
             });
             toast.success(res.data.message);
             console.log(res);
@@ -388,24 +455,85 @@ const UpdateCaseStudy = () => {
                                     </div>
                                 </Form.Group>
 
-                                <Form.Group className="row form-group" controlId="description">
+                                <Form.Group className="row form-group" controlId="slug">
                                     <div className="col-12 col-md-4">
-                                        <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center text-nowrap`}>
-                                            Description
+                                        <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                            Slug
                                         </Form.Label>
                                     </div>
                                     <div className="col-12 col-md-8 mt-0">
                                         <Form.Control
-                                            as="textarea"
-                                            rows={4}
-                                            value={caseStudy.description}
-                                            onChange={(e) => setCaseStudy((prevCaseStudy) => ({
-                                                ...prevCaseStudy,
-                                                description: e.target.value
-                                            }))}
-                                            placeholder="Write your description here..."
-                                            className={`form-control form-control-lg form-textbox`}
+                                            type="text"
+                                            placeholder="Enter Slug..."
+                                            className={`form-control form-control-lg form-input`}
+                                            value={slug}
+                                            onChange={(e) => setSlug(e.target.value)}
+                                            required
                                         />
+                                    </div>
+                                </Form.Group>
+
+                                <Form.Group className="row form-group" controlId="short_description">
+                                    <div className="col-12 col-md-4">
+                                        <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center text-nowrap`}>
+                                            Short Description
+                                        </Form.Label>
+                                    </div>
+                                    <div className="col-12 col-md-8 mt-0">
+                                        {isClient && (
+                                            <Editor
+                                                apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                                                value={caseStudy.short_description}
+                                                init={{
+                                                    height: 250,
+                                                    menubar: false,
+                                                    plugins: [
+                                                        'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                                        'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                                                        'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                    ],
+                                                    toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                                                        'alignleft aligncenter alignright alignjustify | ' +
+                                                        'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                                }}
+                                                onEditorChange={(content) => setCaseStudy((prevCaseStudy) => ({
+                                                    ...prevCaseStudy,
+                                                    short_description: content
+                                                }))}
+                                            />
+                                        )}
+                                    </div>
+                                </Form.Group>
+
+                                <Form.Group className="row form-group" controlId="full_description">
+                                    <div className="col-12 col-md-4">
+                                        <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center text-nowrap`}>
+                                            Full Description
+                                        </Form.Label>
+                                    </div>
+                                    <div className="col-12 col-md-8 mt-0">
+                                        {isClient && (
+                                            <Editor
+                                                apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                                                value={caseStudy.full_description}
+                                                init={{
+                                                    height: 250,
+                                                    menubar: false,
+                                                    plugins: [
+                                                        'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                                        'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                                                        'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                    ],
+                                                    toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                                                        'alignleft aligncenter alignright alignjustify | ' +
+                                                        'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                                }}
+                                                onEditorChange={(content) => setCaseStudy((prevCaseStudy) => ({
+                                                    ...prevCaseStudy,
+                                                    full_description: content
+                                                }))}
+                                            />
+                                        )}
                                     </div>
                                 </Form.Group>
 
@@ -547,6 +675,38 @@ const UpdateCaseStudy = () => {
                                         </div>
                                     </div>
                                 </Form.Group>
+                                <Form.Group className="row form-group" controlId="uploadMainImage">
+                                    <div className="col-12 col-md-4">
+                                        <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                            Main Image
+                                        </Form.Label>
+                                    </div>
+                                    <div className="col-12 col-md-8 mt-0 position-relative">
+                                        <div className="upload-input z-3">
+                                            <Form.Control type="file" onChange={handleMainImageChange} hidden />
+                                            <Form.Label className="form-label z-3 h-100 form-img-uploader rounded-4 d-flex flex-column align-items-center justify-content-center w-100 py-4 position-relative" style={{ zIndex: '2', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                                                <BsCloudUpload size={40} color="white" />
+                                                <h6 className="text-center text-white " style={{ fontSize: "13px" }}>
+                                                    Upload Image
+                                                </h6>
+                                            </Form.Label>
+                                        </div>
+                                        <div className="d-flex mt-1 justify-center w-100 top-0 position-absolute -z-2">
+                                            {caseStudy.mainImage && (
+                                                <div className="mb-2 position-relative d-flex justify-content-center align-items-center w-100 h-100 " >
+                                                    <Image src={caseStudy.mainImage} alt="Case Study Image" width={100} height={100} className="object-fit-contain" style={{ width: '50%', }} />
+                                                    <IoIosCloseCircleOutline
+                                                        size={20}
+                                                        color="red"
+                                                        className="position-absolute"
+                                                        style={{ top: 0, right: 1, cursor: "pointer" }}
+                                                        onClick={removeMainImage}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Form.Group>
                             </Form>
                         </div>
                     </div>
@@ -590,6 +750,68 @@ const UpdateCaseStudy = () => {
                                         </div>
                                     </div>
                                 </Form.Group>
+                            </Form>
+                        </div>
+                    </div>
+                    <div className="card">
+                        <div className="card-header">
+                            <div className="card-title d-flex justify-content-between align-items-center">
+                                <h2>Add Additional Info</h2>
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <Form className="upload-form">
+                                {additionalInfo?.map((info, index) => (
+                                    <div key={index} className="mb-4 border-bottom pb-3">
+                                        <Form.Group className="row form-group">
+                                            <div className="col-12 col-md-4">
+                                                <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                    Title
+                                                </Form.Label>
+                                            </div>
+                                            <div className="col-12 col-md-8 mt-0">
+                                                <div className="d-flex">
+                                                    <Form.Control
+                                                        type="text"
+                                                        value={info.title}
+                                                        onChange={(e) => handleAdditionalInfoChange(index, 'title', e.target.value)}
+                                                        placeholder="Enter title..."
+                                                        required
+                                                        className={`form-control form-control-lg form-input`}
+                                                    />
+                                                    <Button
+                                                        className="bg-transparent border-0"
+                                                        onClick={index === 0 ? addAdditionalInfo : () => removeAdditionalInfo(index)}
+                                                    >
+                                                        {index === 0 ? (
+                                                            <IoIosAdd color="gray" size={25} />
+                                                        ) : (
+                                                            <IoIosClose color="gray" size={25} />
+                                                        )}
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </Form.Group>
+
+                                        <Form.Group className="row form-group mt-3">
+                                            <div className="col-12 col-md-4">
+                                                <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                    Description
+                                                </Form.Label>
+                                            </div>
+                                            <div className="col-12 col-md-8 mt-0">
+                                                <Form.Control
+                                                    as="textarea"
+                                                    value={info.description}
+                                                    onChange={(e) => handleAdditionalInfoChange(index, 'description', e.target.value)}
+                                                    rows={4}
+                                                    placeholder="Write your description here..."
+                                                    className={`form-control form-control-lg form-textbox`}
+                                                />
+                                            </div>
+                                        </Form.Group>
+                                    </div>
+                                ))}
                             </Form>
                         </div>
                     </div>
@@ -899,7 +1121,7 @@ const UpdateCaseStudy = () => {
                 {/* Submit Section */}
                 <Col xs={12} className="my-3">
                     <div className="d-flex justify-content-center justify-content-md-end gap-3">
-                        <Button variant="secondary" onClick={()=> router.push('/admin/case-study/list')} type="button" className="btn form-cancel">
+                        <Button variant="secondary" onClick={() => router.push('/admin/case-study/list')} type="button" className="btn form-cancel">
                             Cancel
                         </Button>
                         <Button variant="primary" onClick={handleUpdateCase} className="btn form-btn">

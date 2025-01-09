@@ -17,8 +17,12 @@ import { getAllSocialMediaReducer } from "./features/GetAllSocialMedia";
 import { getAllCaseStudyReducer } from "./features/GetAllCaseStudy";
 import { getAllBranchReducer } from "./features/GetAllBranch";
 import { adminReducer } from "./features/GetAdmin";
-import { getAllSubServicesReducer } from "./features/GetAllSubServices";
+import { getAllSubServicesFullReducer, getAllSubServicesReducer, getSubServiceByIdReducer } from "./features/GetAllSubServices";
 import { getAllFaqReducer } from "./features/GetAllFaq";
+import { getAllServiceDetailReducer, getAllServiceDetailFullReducer } from "./features/GetAllServiceDetail";
+import { getAllFieldReducer } from "./features/GetAllFields";
+import { getAllIndustryDetailReducer } from "./features/GetAllIndustryDetails";
+import { getStepsReducer } from "./features/GetAllSteps";
 export const store = configureStore({
   reducer: {
     hideShowDrawer: hideShowDrawerReducer,
@@ -32,8 +36,11 @@ export const store = configureStore({
     getAllTechnology: getAllTechnologyReducer,
     getAllServices: getAllServicesReducer,
     getAllServicesFull: getAllServicesFullReducer,
+    getAllServiceDetail: getAllServiceDetailReducer,
+    getAllServiceDetailFull:getAllServiceDetailFullReducer,
     getAllFaq: getAllFaqReducer,
     getAllIndustry: getAllIndustryReducer,
+    getAllIndustryDetail: getAllIndustryDetailReducer,
     getAllCertificates: getAllCertificatesReducer,
     getAllFeedback: getAllFeedbackReducer,
     getAllHeader: getAllHeaderReducer,
@@ -41,6 +48,10 @@ export const store = configureStore({
     getAllCaseStudy: getAllCaseStudyReducer,
     getAllBranch: getAllBranchReducer,
     getAllSubService: getAllSubServicesReducer,
+    getSubServiceById: getSubServiceByIdReducer,
+    getAllSubServicesFull: getAllSubServicesFullReducer,
+    getAllFields: getAllFieldReducer,
+    getSteps: getStepsReducer,
     admin: adminReducer,
   },
 });

@@ -10,9 +10,12 @@ import { useState, useEffect } from "react";
 import styles from "@/assets/css/base.module.css";
 import axios from "axios";
 import { Editor } from "@tinymce/tinymce-react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllFields } from "@/lib/redux/features/GetAllFields";
 
 const AddService = () => {
   const router = useRouter();
+  const dispatch = useDispatch()
   const [title, setTitle] = useState("");
   const [short_description, setShortDescription] = useState("");
   const [long_description, setLongDescription] = useState("");
@@ -20,8 +23,11 @@ const AddService = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [selectedField, setSelectedField] = useState("");
+  const { fields } = useSelector((state) => state.getAllFields);
 
   useEffect(() => {
+    dispatch(getAllFields())
     setIsClient(true);
   }, []);
 
@@ -52,6 +58,7 @@ const AddService = () => {
         long_description,
         button_link,
         image,
+        field_id: selectedField // Add field_id to request
       });
       console.log(response);
       toast.success(response.data.message);
@@ -61,6 +68,7 @@ const AddService = () => {
       setLongDescription("");
       setButtonLink("");
       setImage(null);
+      setSelectedField(""); // Clear field selection
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add service");
     }
@@ -125,6 +133,29 @@ const AddService = () => {
                     placeholder="Enter Service Title"
                     className="form-control form-control-lg form-input"
                   />
+                </div>
+              </Form.Group>
+
+              <Form.Group className="row form-group mt-1 mt-md-2">
+                <div className="col-12 col-md-3">
+                  <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
+                    Select Field
+                  </Form.Label>
+                </div>
+                <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
+                  <Form.Select
+                    value={selectedField}
+                    onChange={(e) => setSelectedField(e.target.value)}
+                    className="form-control form-control-lg form-input"
+                    required
+                  >
+                    <option value="">Select a field</option>
+                    {fields.map((field) => (
+                      <option key={field.id} value={field.id}>
+                        {field.title}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </div>
               </Form.Group>
 

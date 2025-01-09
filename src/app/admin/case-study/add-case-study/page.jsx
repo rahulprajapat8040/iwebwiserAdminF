@@ -12,10 +12,21 @@ import { CountryCode } from "@/utils/CountryCode";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
+import { Editor } from "@tinymce/tinymce-react";
 const AddCaseStudy = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+
   // const [buttonLinks, setButtonLinks] = useState([""]);
+  const [additionalInfo, setAdditionalInfo] = useState([
+    { title: '', description: '' }
+  ]);
   const [phases, setPhases] = useState([{ title: "", features: [""] }]);
   const [industries, setIndustries] = useState([])
 
@@ -33,17 +44,19 @@ const AddCaseStudy = () => {
     fetchIndustries()
   }, [])
 
-
+  const [slug, setSlug] = useState('')
   const [selectedIndustry, setSelectedIndustry] = useState(null);
   const [caseStudy, setCaseStudy] = useState({
     productName: "",
     productSlogan: "",
-    description: "",
+    short_description: "",
+    full_description: "",
     country: "",
     platformUsers: "",
     downloads: "",
     buttonLinks: [""],
     image: "",
+    mainImage: "",
   });
   const [userCertificate, setUserCertificate] = useState({
     certificateImage: []  // Initialize certificateImage as an empty array
@@ -125,6 +138,23 @@ const AddCaseStudy = () => {
     setPhases(updatedPhases);
   };
 
+  // Add handlers for additional info
+  const addAdditionalInfo = () => {
+    setAdditionalInfo([...additionalInfo, { title: '', description: '' }]);
+  };
+
+  const removeAdditionalInfo = (index) => {
+    const updatedInfo = [...additionalInfo];
+    updatedInfo.splice(index, 1);
+    setAdditionalInfo(updatedInfo);
+  };
+
+  const handleAdditionalInfoChange = (index, field, value) => {
+    const updatedInfo = [...additionalInfo];
+    updatedInfo[index][field] = value;
+    setAdditionalInfo(updatedInfo);
+  };
+
   // HANDLE UPLOAD CERTIFICATE IMAGES  
   const handleFileChange = async (e) => {
     const files = e.target.files;
@@ -175,6 +205,31 @@ const AddCaseStudy = () => {
       setCaseStudy((prevCaseStudy) => ({
         ...prevCaseStudy,
         image: uploadedImageUrl,
+      }));
+      toast.success("Case study image uploaded successfully");
+
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      // Handle error appropriately
+    }
+  }
+  const handleMainImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post(`${Apis.uploadFile}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const uploadedImageUrl = response.data.url; // Extract URL from the response data
+      setCaseStudy((prevCaseStudy) => ({
+        ...prevCaseStudy,
+        mainImage: uploadedImageUrl,
       }));
       toast.success("Case study image uploaded successfully");
 
@@ -242,21 +297,33 @@ const AddCaseStudy = () => {
   const handleAddCase = async () => {
     try {
       const res = await axios.post(`${Apis.addCase}`, {
+        slug: slug,
         addCaseStudy: caseStudy,
         userCertificate: userCertificate,
         challenges: Challenges,
         impact: addImpact,
         system_phase: phases,
         industryId: selectedIndustry,
-
+        addtional_information: additionalInfo  // Now sending array of additional info
       })
       toast.success(res.data.message)
-      setCaseStudy(null)
-      setUserCertificate(null)
-      setChallenges(null)
-      setAddImpact(null)
-      setPhases(null)
-      setSelectedIndustry(null)
+      setCaseStudy({
+        productName: "",
+        productSlogan: "",
+        short_description: "",
+        full_description: "",
+        country: "",
+        platformUsers: "",
+        downloads: "",
+        buttonLinks: [""],
+        image: "",
+      })
+      setUserCertificate()
+      setChallenges([])
+      setAddImpact([])
+      setPhases([])
+      setSelectedIndustry([])
+      setAdditionalInfo([{ title: '', description: '' }])
     } catch (error) {
       console.log(error)
     }
@@ -282,6 +349,25 @@ const AddCaseStudy = () => {
             </div>
             <div className="card-body px-4">
               <Form className="upload-form">
+                <Form.Group className="mb-3 row form-group mt-1 mt-md-2" controlId="caseTitle">
+                  <Form.Label
+                    column
+                    md={3}
+                    className={`col-form-label text-nowrap form-label d-flex justify-content-start justify-content-md-center`}
+                  >
+                    Slug
+                  </Form.Label>
+                  <div className="col-12 col-md-8 mt-0">
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter Case Title..."
+                      className={`form-control form-control-lg form-input`}
+                      value={slug}
+                      onChange={(e) => setSlug(e.target.value)}
+                      required
+                    />
+                  </div>
+                </Form.Group>
                 <Form.Group className="mb-3 row form-group mt-1 mt-md-2" controlId="caseTitle">
                   <Form.Label
                     column
@@ -379,21 +465,63 @@ const AddCaseStudy = () => {
                 <Form.Group className="row form-group" controlId="description">
                   <div className="col-12 col-md-4">
                     <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center text-nowrap`}>
-                      Description
+                      Short Description
                     </Form.Label>
                   </div>
                   <div className="col-12 col-md-8 mt-0">
-                    <Form.Control
-                      as="textarea"
-                      rows={4}
-                      value={caseStudy.description}
-                      onChange={(e) => setCaseStudy((prevCaseStudy) => ({
-                        ...prevCaseStudy,
-                        description: e.target.value
-                      }))}
-                      placeholder="Write your description here..."
-                      className={`form-control form-control-lg form-textbox`}
-                    />
+                    {isClient && (
+                      <Editor
+                        apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                        value={caseStudy.short_description}
+                        init={{
+                          height: 250,
+                          menubar: false,
+                          plugins: [
+                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                          ],
+                          toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                            'alignleft aligncenter alignright alignjustify | ' +
+                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                        }}
+                        onEditorChange={(content) => setCaseStudy((prevCaseStudy) => ({
+                          ...prevCaseStudy,
+                          short_description: content
+                        }))}
+                      />
+                    )}
+                  </div>
+                </Form.Group>
+                <Form.Group className="row form-group" controlId="description">
+                  <div className="col-12 col-md-4">
+                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center text-nowrap`}>
+                      Full Description
+                    </Form.Label>
+                  </div>
+                  <div className="col-12 col-md-8 mt-0">
+                    {isClient && (
+                      <Editor
+                        apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                        value={caseStudy.full_description}
+                        init={{
+                          height: 250,
+                          menubar: false,
+                          plugins: [
+                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                          ],
+                          toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                            'alignleft aligncenter alignright alignjustify | ' +
+                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                        }}
+                        onEditorChange={(content) => setCaseStudy((prevCaseStudy) => ({
+                          ...prevCaseStudy,
+                          full_description: content
+                        }))}
+                      />
+                    )}
                   </div>
                 </Form.Group>
 
@@ -527,6 +655,30 @@ const AddCaseStudy = () => {
                     </div>
                   </div>
                 </Form.Group>
+                <Form.Group
+                  className="row form-group"
+                  controlId=" uploadImage"
+                >
+                  <div className="col-12 col-md-4">
+                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                      Main Image
+                    </Form.Label>
+                  </div>
+                  <div className="col-12 col-md-8 mt-0">
+                    <div className="upload-input">
+                      <Form.Control type="file" onChange={handleMainImageChange} hidden />
+                      <Form.Label className="form-label form-img-uploader rounded-4 d-flex flex-column align-items-center justify-content-center w-100 py-4 position-relative">
+                        <BsCloudUpload size={40} color="gray" />
+                        <h6
+                          className="text-center "
+                          style={{ fontSize: "13px" }}
+                        >
+                          Upload Image
+                        </h6>
+                      </Form.Label>
+                    </div>
+                  </div>
+                </Form.Group>
               </Form>
             </div>
           </div>
@@ -571,6 +723,71 @@ const AddCaseStudy = () => {
               </Form>
             </div>
           </div>
+          <div className="card">
+            <div className="card-header">
+              <div
+                className="card-title d-flex justify-content-between align-items-center"
+              >
+                <h2>Add Additional Info</h2>
+              </div>
+            </div>
+            {/* // <!-- card header end here  --> */}
+            <div className="card-body">
+              <Form className="upload-form">
+                {additionalInfo.map((info, index) => (
+                  <div key={index} className="mb-4 border-bottom pb-3">
+                    <Form.Group className="row form-group">
+                      <div className="col-12 col-md-4">
+                        <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                          Title
+                        </Form.Label>
+                      </div>
+                      <div className="col-12 col-md-8 mt-0">
+                        <div className="d-flex">
+                          <Form.Control
+                            type="text"
+                            value={info.title}
+                            onChange={(e) => handleAdditionalInfoChange(index, 'title', e.target.value)}
+                            placeholder="Enter title..."
+                            required
+                            className={`form-control form-control-lg form-input`}
+                          />
+                          <Button
+                            className="bg-transparent border-0"
+                            onClick={index === 0 ? addAdditionalInfo : () => removeAdditionalInfo(index)}
+                          >
+                            {index === 0 ? (
+                              <IoIosAdd color="gray" size={25} />
+                            ) : (
+                              <IoIosClose color="gray" size={25} />
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                    </Form.Group>
+
+                    <Form.Group className="row form-group mt-3">
+                      <div className="col-12 col-md-4">
+                        <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                          Description
+                        </Form.Label>
+                      </div>
+                      <div className="col-12 col-md-8 mt-0">
+                        <Form.Control
+                          as="textarea"
+                          value={info.description}
+                          onChange={(e) => handleAdditionalInfoChange(index, 'description', e.target.value)}
+                          rows={4}
+                          placeholder="Write your description here..."
+                          className={`form-control form-control-lg form-textbox`}
+                        />
+                      </div>
+                    </Form.Group>
+                  </div>
+                ))}
+              </Form>
+            </div>
+          </div>
         </Col>
 
         {/* Add Product Info Section */}
@@ -597,19 +814,28 @@ const AddCaseStudy = () => {
                     </Form.Label>
                   </div>
                   <div className="col-12 col-md-8 mt-0">
-                    <Form.Control
-                      as="textarea"
-                      rows={4}
-                      cols={30}
-                      value={Challenges.challeng}
-                      onChange={(e) => setChallenges((prevChallenges) => ({
-                        ...prevChallenges,
-                        challeng: e.target.value
-                      }))}
-                      placeholder="write your description here..."
-                      required
-                      className={`form-control form-control-lg form-textbox`}
-                    />
+                    {isClient && (
+                      <Editor
+                        apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                        value={Challenges.challeng}
+                        init={{
+                          height: 250,
+                          menubar: false,
+                          plugins: [
+                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                          ],
+                          toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                            'alignleft aligncenter alignright alignjustify | ' +
+                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                        }}
+                        onEditorChange={(content) => setChallenges((prevChallenges) => ({
+                          ...prevChallenges,
+                          challeng: content
+                        }))}
+                      />
+                    )}
                   </div>
                 </Form.Group>
 
@@ -623,17 +849,28 @@ const AddCaseStudy = () => {
                     </Form.Label>
                   </div>
                   <div className="col-12 col-md-8 mt-0">
-                    <Form.Control
-                      as="textarea"
-                      value={Challenges.solution}
-                      onChange={(e) => setChallenges((prevChallenges) => ({
-                        ...prevChallenges,
-                        solution: e.target.value
-                      }))}
-                      rows={4}
-                      placeholder="Write your description here..."
-                      className={`form-control form-control-lg form-textbox`}
-                    />
+                    {isClient && (
+                      <Editor
+                        apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                        value={Challenges.solution}
+                        init={{
+                          height: 250,
+                          menubar: false,
+                          plugins: [
+                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                          ],
+                          toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                            'alignleft aligncenter alignright alignjustify | ' +
+                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                        }}
+                        onEditorChange={(content) => setChallenges((prevChallenges) => ({
+                          ...prevChallenges,
+                          solution: content
+                        }))}
+                      />
+                    )}
                   </div>
                 </Form.Group>
 
@@ -703,18 +940,28 @@ const AddCaseStudy = () => {
                     </Form.Label>
                   </div>
                   <div className="col-12 col-md-8 mt-0">
-                    <Form.Control
-                      as="textarea"
-                      value={addImpact.businessImpact}
-                      onChange={(e) => setAddImpact((prevAddImpact) => ({
-                        ...prevAddImpact,
-                        businessImpact: e.target.value
-                      }))}
-                      rows={4}
-                      placeholder="write your description here..."
-                      required
-                      className={`form-control form-control-lg form-textbox`}
-                    />
+                    {isClient && (
+                      <Editor
+                        apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                        value={addImpact.businessImpact}
+                        init={{
+                          height: 250,
+                          menubar: false,
+                          plugins: [
+                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                          ],
+                          toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                            'alignleft aligncenter alignright alignjustify | ' +
+                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                        }}
+                        onEditorChange={(content) => setAddImpact((prevAddImpact) => ({
+                          ...prevAddImpact,
+                          businessImpact: content
+                        }))}
+                      />
+                    )}
                   </div>
                 </Form.Group>
 
@@ -731,17 +978,28 @@ const AddCaseStudy = () => {
                     </Form.Label>
                   </div>
                   <div className="col-12 col-md-8 mt-0">
-                    <Form.Control
-                      as="textarea"
-                      value={addImpact.userImpact}
-                      onChange={(e) => setAddImpact((prevAddImpact) => ({
-                        ...prevAddImpact,
-                        userImpact: e.target.value
-                      }))}
-                      rows={4}
-                      placeholder="Write your description here..."
-                      className={`form-control form-control-lg form-textbox`}
-                    />
+                    {isClient && (
+                      <Editor
+                        apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                        value={addImpact.userImpact}
+                        init={{
+                          height: 250,
+                          menubar: false,
+                          plugins: [
+                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                          ],
+                          toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                            'alignleft aligncenter alignright alignjustify | ' +
+                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                        }}
+                        onEditorChange={(content) => setAddImpact((prevAddImpact) => ({
+                          ...prevAddImpact,
+                          userImpact: content
+                        }))}
+                      />
+                    )}
                   </div>
                 </Form.Group>
 

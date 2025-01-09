@@ -21,6 +21,7 @@ import { getAllServices } from "@/lib/redux/features/GetAllServices";
 import Link from "next/link";
 import axios from "axios";
 import { Apis } from "@/utils/Apis";
+import { getAllFields } from "@/lib/redux/features/GetAllFields";
 
 // Add this utility function at the top of your file
 const truncateText = (text, maxLength) => {
@@ -77,6 +78,9 @@ const ServiceList = () => {
   useEffect(() => {
     fetchServices();
   }, [currentPage, limit, search]);
+  useEffect(() => {
+    dispatch(getAllFields({}));
+  }, []);
 
   const handleEditClick = (service) => {
     setSelectedService(service);
@@ -291,20 +295,13 @@ const ServiceList = () => {
                           </td>
                           <td>{service.title}</td>
                           <td className="text-center">
-                            <div
-                              className="description-cell"
-                              title={service.short_description} // Shows full text on hover
-
-                            >
-                              {truncateText(service.short_description, 50)}
-                            </div>
+                          <p dangerouslySetInnerHTML={{ __html: (service.short_description.split(' ').slice(0, 6).join(' ') || "No Description Available") + '...' }} className="tools-description__text"></p>
                           </td>
                           <td
                             className="text-center"
                             title={service.long_description}
-
+                             dangerouslySetInnerHTML={{ __html: (service.long_description.split(' ').slice(0, 6).join(' ') || "No Description Available") + '...' }} 
                           >
-                            {truncateText(service.long_description, 50)}
                           </td>
                           <td>{service.button_link}</td>
                           <td className="text-end">

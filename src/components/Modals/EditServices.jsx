@@ -6,18 +6,21 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Apis } from "@/utils/Apis";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllServices } from "@/lib/redux/features/GetAllServices";
 import { Editor } from "@tinymce/tinymce-react";
 
 const EditServices = ({ show, setShowEdit, selectedService }) => {
   const dispatch = useDispatch();
+  const { fields } = useSelector((state) => state.getAllFields);
+  
   useEffect(() => {
     setServiceTitle(selectedService?.title || "");
     setShortDescription(selectedService?.short_description || "");
     setLongDescription(selectedService?.long_description || "");
     setButtonLink(selectedService?.button_link || "");
     setServiceImage(selectedService?.image || "");
+    setSelectedField(selectedService?.field_id || "");
   }, [selectedService]);
 
   const [serviceTitle, setServiceTitle] = useState(selectedService?.title);
@@ -25,6 +28,7 @@ const EditServices = ({ show, setShowEdit, selectedService }) => {
   const [longDescription, setLongDescription] = useState(selectedService?.long_description);
   const [buttonLink, setButtonLink] = useState(selectedService?.button_link);
   const [serviceImage, setServiceImage] = useState(selectedService?.image);
+  const [selectedField, setSelectedField] = useState("");
 
   // HANDLE IMAGE UPLOAD
   const handleMedia = async (e) => {
@@ -54,6 +58,7 @@ const EditServices = ({ show, setShowEdit, selectedService }) => {
           short_description: shortDescription,
           long_description: longDescription,
           button_link: buttonLink,
+          field_id: selectedField // Add field_id to request
         }
       );
       dispatch(getAllServices({ page: 1, limit: 10, showAll: false }));
@@ -84,6 +89,24 @@ const EditServices = ({ show, setShowEdit, selectedService }) => {
               className={`flex-grow-1 p-2 w-75 ${styles.mdFont}`}
               required
             />
+          </Form.Group>
+          <Form.Group className="mb-4 d-flex align-items-center">
+            <Form.Label className={`w-25 m-0 ${styles.mdFont}`}>
+              Select Field
+            </Form.Label>
+            <Form.Select
+              value={selectedField}
+              onChange={(e) => setSelectedField(e.target.value)}
+              className={`flex-grow-1 p-2 w-75 ${styles.mdFont}`}
+              required
+            >
+              <option value="">Select a field</option>
+              {fields.map((field) => (
+                <option key={field.id} value={field.id}>
+                  {field.title}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
           <Form.Group className="mb-4">
             <Form.Label className={`${styles.mdFont}`}>
@@ -175,16 +198,16 @@ const EditServices = ({ show, setShowEdit, selectedService }) => {
           </Form.Group>
         </Form>
         <div className="d-flex justify-content-center gap-2">
-          <Button
+          <button
             type="button"
-            className="btn btn-secondary"
+            className="btn form-cancel"
             onClick={() => setShowEdit(false)}
           >
             Close
-          </Button>
+          </button>
           <Button
             type="button"
-            className={`btn bg-primary `}
+            className={`btn form-btn `}
             onClick={updateService}
           >
             Save

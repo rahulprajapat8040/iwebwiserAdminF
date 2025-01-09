@@ -68,7 +68,7 @@ const SocialMediaList = () => {
 
   useEffect(() => {
     fetchTechnologies();
-  }, [currentPage, limit, search, fetchTechnologies]);
+  }, [currentPage, limit, search]);
 
   const handleEditClick = (socialData) => {
     setSelectedSocialMedia(socialData);

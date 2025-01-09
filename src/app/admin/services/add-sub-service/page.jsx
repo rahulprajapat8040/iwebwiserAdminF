@@ -11,6 +11,7 @@ import styles from "@/assets/css/base.module.css";
 import axios from "axios";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDispatch, useSelector } from "react-redux";
+import { getAllServicesFull } from "@/lib/redux/features/GetAllServices";
 
 const AddSubService = () => {
   const router = useRouter();
@@ -18,28 +19,28 @@ const AddSubService = () => {
   const [subServiceDescription, setSubServiceDescription] = useState("");
   const [serviceId, setServiceId] = useState("");
   const [buttonLink, setButtonLink] = useState("");
-  const [services, setServices] = useState([]);
   const dispatch = useDispatch();
   const [isClient, setIsClient] = useState(false);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(false);
+  const { services } = useSelector((state) => state.getAllServicesFull);
 
   useEffect(() => {
     setIsClient(true);
+    dispatch(getAllServicesFull());
   }, []);
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await axios.get(`${Apis.getAllServicesFull}`);
-        setServices(response.data.data.services);
-        console.log(response)
-      } catch (error) {
-        console.error("Failed to fetch services", error);
-      }
-    };
-    fetchServices();
-  }, []);
+  // useEffect(() => {
+  //   const fetchServices = async () => {
+  //     try {
+  //       const response = await axios.get(`${Apis.getAllServicesFull}`);
+  //       setServices(response.data.data.services);
+  //     } catch (error) {
+  //       console.error("Failed to fetch services", error);
+  //     }
+  //   };
+  //   fetchServices();
+  // }, []);
 
   // HANDLE IMAGE UPLOAD
   const handleMedia = async (e) => {
@@ -180,9 +181,14 @@ const AddSubService = () => {
                       init={{
                         height: 250,
                         menubar: false,
-                        plugins: ["link", "lists", "image", "media"],
-                        toolbar:
-                          "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link",
+                        plugins: [
+                          'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                          'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                          'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount', 
+                        ],
+                        toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                          'alignleft aligncenter alignright alignjustify | ' +
+                          'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help' 
                       }}
                       onEditorChange={(content) => setSubServiceDescription(content)}
                     />

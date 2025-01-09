@@ -241,7 +241,8 @@ const ViewCaseStudy = () => {
                                                     {caseStudy?.challenges?.image ? (
                                                         <Image
                                                             src={caseStudy?.challenges?.image}
-                                                            width="90%"
+                                                            width={500}
+                                                            height={500}
                                                             alt="aboutImage"
                                                             className="img-fluid"
                                                         />) : "No Image Available"}
@@ -284,7 +285,8 @@ const ViewCaseStudy = () => {
                                                     {caseStudy?.challenges?.image ? (
                                                         <Image
                                                             src={caseStudy?.challenges?.image}
-                                                            width="90%"
+                                                            width={500}
+                                                            height={500}
                                                             alt="aboutImage"
                                                             className="img-fluid"
                                                         />) : "No Image Available"}
@@ -345,7 +347,8 @@ const ViewCaseStudy = () => {
                                                     {caseStudy?.impact?.image ? (
                                                         <Image
                                                             src={caseStudy?.impact?.image}
-                                                            width="90%"
+                                                            width={500}
+                                                            height={500}
                                                             alt="aboutImage"
                                                             className="img-fluid"
                                                         />) : "No Image is Available"}
@@ -370,7 +373,8 @@ const ViewCaseStudy = () => {
                                                     {caseStudy?.impact?.image ? (
                                                         <Image
                                                             src={caseStudy?.impact?.image}
-                                                            width="90%"
+                                                            width={500}
+                                                            height={500}
                                                             alt="aboutImage"
                                                             className="img-fluid"
                                                         />) : "No Image is Available"}
@@ -402,6 +406,8 @@ const ViewCaseStudy = () => {
                                                         >
                                                             <Image
                                                                 src={image}
+                                                                width={500}
+                                                                height={500}
                                                                 className="img-fluid object-fit-"
                                                                 style={{ height: '200px' }}                                                                
                                                                 alt={`Certificate ${index + 1}`}

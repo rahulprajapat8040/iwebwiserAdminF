@@ -20,6 +20,37 @@ export const getAllSubService = createAsyncThunk(
   }
 );
 
+export const getSubServiceById = createAsyncThunk(
+  "getSubServiceById",
+  async (serviceId) => {
+    try {
+      const response = await axios.get(`${Apis.getByServiceId}/${serviceId}`);
+      return {
+        subServices: response.data.data,
+      };
+    } catch (error) {
+      console.error(error);
+      return error.response.data;
+    }
+  }
+);
+
+export const getAllSubServicesFull = createAsyncThunk(
+  "getAllSubServicesFull",
+  async () => { 
+    try {
+      const response = await axios.get(`${Apis.getAllSubServicesFull}`);
+      console.log(response)
+      return {
+        subServices: response.data.data.subServices,
+      };
+    } catch (error) {
+      console.error(error);
+      return error.response.data;
+    }
+  }
+);
+
 export const getAllSubServicesSlice = createSlice({
   name: "getAllSubService",
   initialState: {
@@ -44,4 +75,50 @@ export const getAllSubServicesSlice = createSlice({
   },
 });
 
+export const getSubServiceByIdSlice = createSlice({
+  name: "getSubServiceById",
+  initialState: {
+    subServices: [],
+    isLoading: false,
+    error: "",
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getSubServiceById.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getSubServiceById.fulfilled, (state, action) => {
+      state.subServices = action.payload.subServices;
+      state.isLoading = false;
+    });
+    builder.addCase(getSubServiceById.rejected, (state, action) => {
+      state.error = action.error.message;
+      state.isLoading = false;
+    });
+  },
+});
+
+export const getAllSubServicesFullSlice = createSlice({
+  name: "getAllSubServicesFull",
+  initialState: {
+    subServices: [],
+    isLoading: false,
+    error: "",
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getAllSubServicesFull.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getAllSubServicesFull.fulfilled, (state, action) => {
+      state.subServices = action.payload.subServices;
+      state.isLoading = false;
+    });
+    builder.addCase(getAllSubServicesFull.rejected, (state, action) => {
+      state.error = action.error.message;
+      state.isLoading = false;
+    });
+  },
+});
+
 export const getAllSubServicesReducer = getAllSubServicesSlice.reducer;
+export const getSubServiceByIdReducer = getSubServiceByIdSlice.reducer;
+export const getAllSubServicesFullReducer = getAllSubServicesFullSlice.reducer;

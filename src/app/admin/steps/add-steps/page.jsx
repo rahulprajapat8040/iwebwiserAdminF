@@ -1,31 +1,23 @@
 "use client";
-import {  Form, Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { BsCloudUpload } from "react-icons/bs";
 import { Apis } from "@/utils/Apis";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ImagePreview from "@/components/Modals/ImagePreview";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "@/assets/css/base.module.css";
 import axios from "axios";
-import { Editor } from "@tinymce/tinymce-react";
 
-const AddIndustry = () => {
+const AddSteps = () => {
   const router = useRouter();
-  const [IndustryTitle, setIndustryTitle] = useState("");
-  const [IndustryDescription, setIndustryDescription] = useState("");
-  const [IndustryButtonLink, setIndustryButtonLink] = useState("");
-  const [IndustryImage, setIndustryImage] = useState(null);
+  const [StepTitle, setStepTitle] = useState("");
+  const [StepDescription, setStepDescription] = useState("");
+  const [StepImage, setStepImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   // HANDLE IMAGE UPLOAD
-
   const handleMedia = async (e) => {
     try {
       const formData = new FormData();
@@ -35,7 +27,7 @@ const AddIndustry = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setIndustryImage(res.data.url);
+      setStepImage(res.data.url);
       toast.success("Image Uploaded Successfully");
     } catch (error) {
       console.log(error);
@@ -43,43 +35,35 @@ const AddIndustry = () => {
     }
   };
 
-  // HANDLE INDUSTRY ADD
-
-  const handleAddIndustry = async (e) => {
+  // HANDLE STEP ADD
+  const handleAddStep = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(Apis.createIndustry, {
-        title: IndustryTitle,
-        description: IndustryDescription,
-        button_link: IndustryButtonLink,
-        image: IndustryImage,
+      const response = await axios.post(Apis.createStep, {
+        title: StepTitle,
+        description: StepDescription,
+        image: StepImage,
       });
       toast.success(response.data.message);
-      // Clear the input fields and increment the index for the next branch
-      setIndustryTitle("");
-      setIndustryDescription("");
-      setIndustryServices("");
-      setIndustryButtonLink("");
-      setIndustryImage("");
+      // Clear the input fields
+      setStepTitle("");
+      setStepDescription("");
+      setStepImage("");
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
+
   return (
     <div>
       <ToastContainer />
       {imagePreview && (
-        <ImagePreview image={IndustryImage} setImagePreview={setImagePreview} />
+        <ImagePreview image={StepImage} setImagePreview={setImagePreview} />
       )}
       <div className="dash-head">
         <div className="dash_title">
-          <div onClick={() => router.back()} className="btn  d-inline-flex align-items-center gap-2">
-
-            <div
-
-              className="d-inline-block bg-primary p-1 px-2 rounded-3"
-              style={{ cursor: "pointer" }}
-            >
+          <div onClick={() => router.back()} className="btn d-inline-flex align-items-center gap-2">
+            <div className="d-inline-block bg-primary p-1 px-2 rounded-3" style={{ cursor: "pointer" }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height={25}
@@ -90,93 +74,61 @@ const AddIndustry = () => {
                 <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
               </svg>
             </div>
-            <h4 className={`main-title`}>Add Industry</h4>
+            <h4 className={`main-title`}>Add Step</h4>
           </div>
         </div>
       </div>
 
       <div className="container-fluid">
-        {/* <!-- card start here  --> */}
         <div className="card">
-          {/* <!-- card header start here  --> */}
           <div className="card-header">
-            <div
-              className="card-title d-flex justify-content-between align-items-center"
-            >
-              <h2>Add Industry</h2>
+            <div className="card-title d-flex justify-content-between align-items-center">
+              <h2>Add Step</h2>
             </div>
           </div>
-          {/* <!-- card header end here  --> */}
 
           <div className="card-body px-0 px-md-5">
-            <Form onSubmit={handleAddIndustry} className="upload-form">
-              {/* Social Title Input */}
+            <Form onSubmit={handleAddStep} className="upload-form">
+              {/* Step Title Input */}
               <Form.Group className="row form-group mt-1 mt-md-2">
                 <div className="col-12 col-md-3">
                   <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                    Industry Title
+                    Step Title
                   </Form.Label>
                 </div>
                 <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
                   <Form.Control
                     type="text"
-                    placeholder="Enter Industry Title"
+                    placeholder="Enter Step Title"
                     className="form-control form-control-lg form-input"
                     style={{ fontSize: "13px" }}
-                    value={IndustryTitle}
-                    onChange={(e) => setIndustryTitle(e.target.value)}
+                    value={StepTitle}
+                    onChange={(e) => setStepTitle(e.target.value)}
                   />
                 </div>
               </Form.Group>
 
-              {/* Social Link Input */}
+              {/* Step Description Input */}
               <Form.Group className="row form-group mt-1 mt-md-2">
                 <div className="col-12 col-md-3">
                   <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                    Industry Description
-                  </Form.Label>
-                </div>
-                <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
-                  {isClient && (
-                    <Editor
-                      apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
-                      value={IndustryDescription}
-                      init={{
-                        height: 250,
-                        menubar: false,
-                        plugins: [
-                          'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
-                          'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                          'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
-                        ],
-                        toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
-                          'alignleft aligncenter alignright alignjustify | ' +
-                          'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
-                      }}
-                      onEditorChange={(content) => setIndustryDescription(content)}
-                    />
-                  )}
-                </div>
-              </Form.Group>
-              {/* Social Link Input */}
-              <Form.Group className="row form-group mt-1 mt-md-2">
-                <div className="col-12 col-md-3">
-                  <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                    Button Link
+                    Step Description
                   </Form.Label>
                 </div>
                 <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
                   <Form.Control
-                    type="text"
-                    placeholder="Enter Button Link..."
-                    className="form-control form-control-lg form-input"
+                    as="textarea"
+                    rows={5}
+                    placeholder="Enter Step Description"
+                    className="form-control form-control-lg form-textbox"
                     style={{ fontSize: "13px" }}
-                    value={IndustryButtonLink}
-                    onChange={(e) => setIndustryButtonLink(e.target.value)}
+                    value={StepDescription}
+                    onChange={(e) => setStepDescription(e.target.value)}
                   />
                 </div>
               </Form.Group>
 
+              {/* Upload Image */}
               <Form.Group className="row form-group mt-1 mt-md-2">
                 <div className="col-12 col-md-3">
                   <Form.Label className={`col-form-label form-label d-flex justify-content-left justify-content-md-center`}>
@@ -184,7 +136,6 @@ const AddIndustry = () => {
                   </Form.Label>
                 </div>
                 <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
-
                   <div
                     className="form-control form-control-lg d-flex flex-column justify-content-center form-input"
                     style={{ height: "150px" }}
@@ -192,16 +143,16 @@ const AddIndustry = () => {
                     <Form.Label
                       className="d-flex flex-column align-items-center justify-content-center"
                       style={{ cursor: "pointer" }}
-                      htmlFor="IndustryImage"
+                      htmlFor="StepImage"
                     >
                       <BsCloudUpload size={40} color="gray" />
                       <h6 className={`text-center py-3 ${styles.smFont}`}>
                         Upload Image
                       </h6>
                     </Form.Label>
-                    {IndustryImage && (
+                    {StepImage && (
                       <h6
-                        className={`text-center   text-primary ${styles.mdFont}`}
+                        className={`text-center text-primary ${styles.mdFont}`}
                         style={{ cursor: "pointer" }}
                         onClick={() => setImagePreview(true)}
                       >
@@ -211,7 +162,7 @@ const AddIndustry = () => {
                   </div>
                 </div>
                 <Form.Control
-                  id="IndustryImage"
+                  id="StepImage"
                   hidden
                   type="file"
                   onChange={handleMedia}
@@ -222,7 +173,7 @@ const AddIndustry = () => {
               {/* Submit Button */}
               <div className="row">
                 <div className="col-4 col-md-3"></div>
-                <div className="col-12 col-md-8   form-button">
+                <div className="col-12 col-md-8 form-button">
                   <Button variant="secondary" type="button" className="btn form-cancel">
                     Cancel
                   </Button>
@@ -239,4 +190,4 @@ const AddIndustry = () => {
   );
 };
 
-export default AddIndustry;
+export default AddSteps;

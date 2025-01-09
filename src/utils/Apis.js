@@ -1,6 +1,6 @@
 // const BaseUrl = "https://b5123341-8001.inc1.devtunnels.ms/api/v1";
-const BaseUrl = "http://213.210.21.175:8001/api/v1";
-// const BaseUrl = "http://localhost:8001/api/v1";
+// const BaseUrl = "http://213.210.21.175:8001/api/v1";
+const BaseUrl = "http://localhost:8001/api/v1";
 
 export const Apis = {
   // admin apis
@@ -38,6 +38,9 @@ export const Apis = {
   // SUB-SERVICE APIS START
   createSubService: `${BaseUrl}/subService/createSubService`, // create sub-service
   getAllSubService: `${BaseUrl}/subService/getAllSubService`, // get all sub-service
+  getAllSubServicesFull: `${BaseUrl}/subService/getAllSubService?showAll=true`, // get all sub-service with showAll=true
+  getByServiceId: `${BaseUrl}/subService/getByServiceId`, // get sub-service by id
+  getSubServiceById: `${BaseUrl}/subService/getSubServiceById`, // get sub-service by id
   searchSubService: `${BaseUrl}/subService/searchByTitle`, // serach subservice
   updateSubService: `${BaseUrl}/subService/updataSubService`, // update sub-service
   deleteSubService: `${BaseUrl}/subService/deleteSubService`, // delete sub-service
@@ -45,9 +48,22 @@ export const Apis = {
   // SERVICE FAQ API START
   createServiceFaq: `${BaseUrl}/serviceFaq/createServiceFaq`, // create service-faq
   getAllServiceFaq: `${BaseUrl}/serviceFaq/getAllServiceFaq`, // get all service-faq
-  updateServiceFaq: `${BaseUrl}/serviceFaq/updataServiceFaq`, // update service-faq 
+  updateServiceFaq: `${BaseUrl}/serviceFaq/updataServiceFaq`, // update service-faq
   deleteServiceFaq: `${BaseUrl}/serviceFaq/deleteServiceFaq`, // delete service-faq
   searchServiceFaq: `${BaseUrl}/serviceFaq/serarchServiceFaq`, // search service-faq
+
+  // SERVICE DETAILS API START
+  AddServiceDetails: `${BaseUrl}/serviceDetail/createServiceDetail`, // add service details
+  getAllServiceDetail: `${BaseUrl}/serviceDetail/getServiceDetail`, // get all service details
+  deleteServiceDetail: `${BaseUrl}/serviceDetail/deleteServiceDetail`, // delete service details
+  getServiceDetailById: `${BaseUrl}/serviceDetail/getserviceDetailById`, // get service details by id
+  updateServiceDetail: `${BaseUrl}/serviceDetail/updateServiceDetail`, // update service details
+
+  // FIELD APIS START
+  createField: `${BaseUrl}/field/createField`, // create field
+  getAllField: `${BaseUrl}/field/getAllField`, // get all field
+  updateField: `${BaseUrl}/field/updataField`, // update field
+  deleteField: `${BaseUrl}/field/deleteField`, // delete field
 
   // INDUSTRY APIS START
   createIndustry: `${BaseUrl}/industry/createIndustry`, // create industry
@@ -119,4 +135,17 @@ export const Apis = {
   deleteSocialLink: `${BaseUrl}/socialMedia/deletesocialMedia`, // delete social media
   searchSocialMedia: `${BaseUrl}/socialMedia/searchSoicalMedia`, // search social media
   updateSocialMedia: `${BaseUrl}/socialMedia/updataSocialMedia`, // update social media
+
+  // INDUSTRY DETAILS APIS START
+  AddIndustryDetails: `${BaseUrl}/industryPage/createIndustryPage`, // add industry details
+  getAllIndustryDetail: `${BaseUrl}/industryPage/getAllIndustryPage`, // get all industry details
+  deleteIndustryDetail: `${BaseUrl}/industryPage/deleteIndustryPage`, // delete industry details
+  getIndustryDetailById: `${BaseUrl}/industryPage/getIndustryPageById`, // get industry details by id
+  updateIndustryDetail: `${BaseUrl}/industryPage/updateIndustryPage`, // update industry details
+
+  // SETP APIS START
+  createStep: `${BaseUrl}/steps/createSteps`, // create steps
+  getAllSetp: `${BaseUrl}/steps/getAllSteps`, // get all steps
+  updateSetp: `${BaseUrl}/steps/updateSteps`, // update steps
+  deleteSetp: `${BaseUrl}/steps/deleteSteps`, // delete steps
 };

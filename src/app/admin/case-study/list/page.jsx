@@ -150,7 +150,7 @@ const CaseStudyList = () => {
                                                     />
                                                 </td>
                                                 <td>{item.addCaseStudy?.productName}</td>
-                                                <td>{item.addCaseStudy?.description.slice(0, 20) + "..."}</td>
+                                                <td>{item.addCaseStudy?.short_description.slice(0, 20) + "..."}</td>
                                                 <td>
                                                     <div className="d-flex align-items-center justify-content-center gap-2">
                                                         <div
