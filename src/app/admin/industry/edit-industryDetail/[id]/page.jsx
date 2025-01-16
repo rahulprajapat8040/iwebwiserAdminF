@@ -54,8 +54,8 @@ const EditIndustryDetail = () => {
                 setHeroDescription(data?.hero_description);
                 setIndustryTitle(data?.industry_title);
                 setIndustryDescription(data?.industry_description);
-                setIndustrySolution(Array.isArray(data?.idnustrySolution
-                ) ? data.idnustrySolution
+                setIndustrySolution(Array.isArray(data?.industrySolution
+                ) ? data.industrySolution
                     : [{ title: "", description: "" }]);
             } catch (error) {
                 console.error("Error fetching industry detail:", error);
