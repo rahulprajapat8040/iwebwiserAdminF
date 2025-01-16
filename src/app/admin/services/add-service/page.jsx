@@ -104,7 +104,7 @@ const AddService = () => {
                 <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
               </svg>
             </div>
-            <h4 className={`main-title`}>Add Service</h4>
+            <h4 className={`main-title`}>Add Sub Service</h4>
           </div>
         </div>
       </div>
@@ -113,7 +113,7 @@ const AddService = () => {
         <div className="card">
           <div className="card-header">
             <div className="card-title d-flex justify-content-between align-items-center">
-              <h2>Add Services</h2>
+              <h2>Add Sub Services</h2>
             </div>
           </div>
 
@@ -122,7 +122,7 @@ const AddService = () => {
               <Form.Group className="row form-group mt-1 mt-md-2">
                 <div className="col-12 col-md-3">
                   <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                    Service Title
+                     Title
                   </Form.Label>
                 </div>
                 <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
@@ -130,7 +130,7 @@ const AddService = () => {
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Enter Service Title"
+                    placeholder="Enter Title.."
                     className="form-control form-control-lg form-input"
                   />
                 </div>
@@ -139,7 +139,7 @@ const AddService = () => {
               <Form.Group className="row form-group mt-1 mt-md-2">
                 <div className="col-12 col-md-3">
                   <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                    Select Field
+                    Select Service
                   </Form.Label>
                 </div>
                 <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
@@ -149,7 +149,7 @@ const AddService = () => {
                     className="form-control form-control-lg form-input"
                     required
                   >
-                    <option value="">Select a field</option>
+                    <option value="">Select a Service</option>
                     {fields.map((field) => (
                       <option key={field.id} value={field.id}>
                         {field.title}

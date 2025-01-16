@@ -10,6 +10,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { Editor } from "@tinymce/tinymce-react";
 import { getSubServiceById } from "@/lib/redux/features/GetAllSubServices";
 import { getAllServicesFull } from "@/lib/redux/features/GetAllServices";
+import { IoIosAdd, IoIosClose } from "react-icons/io";
+import { getAllTechnologyFull } from "@/lib/redux/features/GetAllTechnologies";
+import { BsCloudUpload } from "react-icons/bs";
+import Image from "next/image";
+
 
 const AddServiceDetails = () => {
     const dispatch = useDispatch()
@@ -20,10 +25,15 @@ const AddServiceDetails = () => {
     const { subServices } = useSelector(
         (state) => state.getSubServiceById
     );
-
+    const { technologies } = useSelector(
+        (state) => state.getAllTechnologyFull
+    )
     useEffect(() => {
         dispatch(getAllServicesFull())
+        dispatch(getAllTechnologyFull())
     }, [])
+
+    console.log(technologies)
 
     useEffect(() => {
         dispatch(getSubServiceById(selectedService));
@@ -56,16 +66,89 @@ const AddServiceDetails = () => {
     // TOOLS DETAILS 
     const [toolsTitle, setToolsTitle] = useState("")
     const [toolsDescription, setToolsDescription] = useState("")
-    const [selectedSubServices, setSelectedSubServices] = useState([]);
 
-    const handleSubServiceChange = (subServiceId) => {
-        setSelectedSubServices(prev => {
-            if (prev.includes(subServiceId)) {
-                return prev.filter(id => id !== subServiceId);
-            } else {
-                return [...prev, subServiceId];
-            }
-        });
+    // Service Solution
+    const [serviceSolution, setServiceSolution] = useState([{
+        title: "",
+        description: "",
+    }])
+
+    const addServiceSolution = () => {
+        setServiceSolution([...serviceSolution, { title: "", description: "" }])
+    }
+
+    const removeServiceSolution = (index) => {
+        const updatedSolution = [...serviceSolution]
+        updatedSolution.splice(index, 1)
+        setServiceSolution(updatedSolution)
+    }
+
+    const handleServiceSolutionChange = (index, field, value) => {
+        const updatedSolution = [...serviceSolution]
+        updatedSolution[index][field] = value
+        setServiceSolution(updatedSolution)
+    }
+
+    // STEPS WE FOLLOW
+    const [steps, setSteps] = useState([
+        {
+            title: "",
+            description: "",
+            image: ""
+        }
+    ])
+
+    const handleStepsWeFollowChange = (index, field, value) => {
+        const updatedSteps = [...steps]
+        updatedSteps[index][field] = value
+        setSteps(updatedSteps)
+    }
+
+    const addStepsWeFollow = () => {
+        const updatedSteps = [...steps]
+        updatedSteps.push({
+            title: "",
+            description: ""
+        })
+        setSteps(updatedSteps)
+    }
+
+    const removeStepsWeFollow = (index) => {
+        const updatedSteps = [...steps]
+        updatedSteps.splice(index, 1)
+        setSteps(updatedSteps)
+    }
+
+    // Tech We Use
+
+    const [techSections, setTechSections] = useState([{ title: "", technologies: [] }]);
+
+    const handleTechSectionChange = (index, field, value) => {
+        const updatedSections = [...techSections];
+        updatedSections[index][field] = value;
+        setTechSections(updatedSections);
+    };
+
+
+    const handleTechSelection = (sectionIndex, tech) => {
+        const updatedSections = [...techSections];
+        const techIndex = updatedSections[sectionIndex].technologies.findIndex((t) => t.id === tech.id);
+        if (techIndex > -1) {
+            updatedSections[sectionIndex].technologies.splice(techIndex, 1); // Remove if already exists
+        } else {
+            updatedSections[sectionIndex].technologies.push(tech); // Add if not exists
+        }
+        setTechSections(updatedSections);
+    };
+
+    const addTechSection = () => {
+        setTechSections([...techSections, { title: "", technologies: [] }]);
+    };
+
+    const removeTechSection = (index) => {
+        const updatedSections = [...techSections];
+        updatedSections.splice(index, 1);
+        setTechSections(updatedSections);
     };
 
     // ADD CASE 
@@ -79,7 +162,6 @@ const AddServiceDetails = () => {
 
             const serviceData = {
                 service_id: selectedService,
-                sub_service_ids: selectedSubServices,
                 slug: slug,
                 hero_title: heroTitle,
                 hero_description: heroDescription,
@@ -93,15 +175,17 @@ const AddServiceDetails = () => {
                 serviceIndustryTitle: serviceIndustryTitle,
                 serviceIndustryDescription: serviceIndustryDescription,
                 serviceToolTitle: toolsTitle,
-                serviceToolDescription: toolsDescription
+                serviceToolDescription: toolsDescription,
+                stepsWeFollow: steps,
+                serviceSolution: serviceSolution,
+                techWeUse: techSections,
             };
 
             const res = await axios.post(`${Apis.AddServiceDetails}`, serviceData);
-
+            console.log(res)
             toast.success(res.data.message);
             // Reset all form fields
             setSelectedService(null);
-            setSelectedSubServices([]);
             setHeroTitle("");
             setHeroDescription("");
             setHeroBtnText("");
@@ -115,6 +199,15 @@ const AddServiceDetails = () => {
             setServiceIndustryDescription("");
             setToolsTitle("");
             setToolsDescription("");
+            setSteps([{
+                title: "",
+                description: "",
+            }])
+            setServiceSolution([{
+                title: "",
+                description: "",
+            }])
+            setTechSections([{ title: "", technologies: [] }])
 
             // Optionally redirect
         } catch (error) {
@@ -126,6 +219,32 @@ const AddServiceDetails = () => {
     const handleCancel = () => {
         router.push('/admin/case-study/list')
     }
+
+
+    const handleStepImageChange = async (e, index) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const response = await axios.post(`${Apis.uploadFile}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            const uploadedImageUrl = response.data.url; // Extract URL from the response data
+            const updatedSteps = [...steps];
+            updatedSteps[index].image = uploadedImageUrl;
+            setSteps(updatedSteps);
+            toast.success("Case study image uploaded successfully");
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            // Handle error appropriately
+        }
+    }
+
+
 
     return (
         <div>
@@ -155,7 +274,7 @@ const AddServiceDetails = () => {
                                             type="text"
                                             value={slug}
                                             onChange={(e) => setSlug(e.target.value)}
-                                            placeholder="eg: /service-slug"
+                                            placeholder="eg:  service-slug"
                                             required
                                             className={`form-control form-control-lg form-input`}
                                         />
@@ -240,13 +359,13 @@ const AddServiceDetails = () => {
                                                     height: 250,
                                                     menubar: false,
                                                     plugins: [
-                                                        'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                                        'autolink',
                                                         'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                                                        'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                        'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                                                     ],
                                                     toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                                                         'alignleft aligncenter alignright alignjustify | ' +
-                                                        'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                                        'bullist numlist  outdent indent | removeformat |  code table help'
                                                 }}
                                                 onEditorChange={(content) => setHeroDescription(content)}
                                             />
@@ -346,13 +465,13 @@ const AddServiceDetails = () => {
                                                             height: 250,
                                                             menubar: false,
                                                             plugins: [
-                                                                'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                                                'autolink',
                                                                 'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                                                                'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                                'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                                                             ],
                                                             toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                                                                 'alignleft aligncenter alignright alignjustify | ' +
-                                                                'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                                                'bullist numlist  outdent indent | removeformat |  code table help'
                                                         }}
                                                         onEditorChange={(content) => setToolsDescription(content)}
                                                     />
@@ -360,6 +479,100 @@ const AddServiceDetails = () => {
                                             </div>
                                         </div>
                                     </Form.Group>
+                                </div>
+                            </Form>
+                        </div>
+                    </div>
+                    <div className="card mt-3">
+                        {/* <!-- card header start here  --> */}
+                        <div className="card-header">
+                            <div
+                                className="card-title d-flex justify-content-between align-items-center"
+                            >
+                                <h2>Steps we follow</h2>
+                                {/* <!-- <a href="add_header.html" className="btn sub_btn">ADD</a> --> */}
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <Form className="upload-form">
+                                <div className="mb-3 pb-3">
+
+
+                                    {steps.map((steps, index) => (
+                                        <div key={index} className="mb-4 border-bottom pb-3">
+                                            <Form.Group className="row form-group">
+                                                <div className="col-12 col-md-4">
+                                                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                        Title
+                                                    </Form.Label>
+                                                </div>
+                                                <div className="col-12 col-md-8 mt-0">
+                                                    <div className="d-flex">
+                                                        <Form.Control
+                                                            type="text"
+                                                            value={steps.title}
+                                                            onChange={(e) => handleStepsWeFollowChange(index, 'title', e.target.value)}
+                                                            placeholder="Enter title..."
+                                                            required
+                                                            className={`form-control form-control-lg form-input`}
+                                                        />
+                                                        <Button
+                                                            className="bg-transparent border-0"
+                                                            onClick={index === 0 ? addStepsWeFollow : () => removeStepsWeFollow(index)}
+                                                        >
+                                                            {index === 0 ? (
+                                                                <IoIosAdd color="gray" size={25} />
+                                                            ) : (
+                                                                <IoIosClose color="gray" size={25} />
+                                                            )}
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </Form.Group>
+
+                                            <Form.Group className="row form-group mt-3">
+                                                <div className="col-12 col-md-4">
+                                                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                        Description
+                                                    </Form.Label>
+                                                </div>
+                                                <div className="col-12 col-md-8 mt-0">
+                                                    <Form.Control
+                                                        as="textarea"
+                                                        value={steps.description}
+                                                        onChange={(e) => handleStepsWeFollowChange(index, 'description', e.target.value)}
+                                                        rows={4}
+                                                        placeholder="Write your description here..."
+                                                        className={`form-control form-control-lg form-textbox`}
+                                                    />
+                                                </div>
+                                            </Form.Group>
+                                            <Form.Group className="row form-group">
+                                                <div className="col-12 col-md-4">
+
+                                                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                        Impact Image
+                                                    </Form.Label>
+                                                </div>
+                                                <div className="col-12 col-md-8 mt-0">
+                                                    <div className="form-group mb-20 upload-input">
+                                                        <Form.Control type="file" id={`userImpactImage-${index}`}
+                                                            onChange={(e) => handleStepImageChange(e, index)}
+                                                            hidden />
+                                                        <Form.Label htmlFor={`userImpactImage-${index}`} className="form-label flex-column form-img-uploader rounded-4 d-flex align-items-center justify-content-center w-100 py-4 position-relative">
+                                                            <BsCloudUpload size={40} color="gray" />
+                                                            <h6
+                                                                className="text-center "
+                                                                style={{ fontSize: "13px" }}
+                                                            >
+                                                                Upload Image
+                                                            </h6>
+                                                        </Form.Label>
+                                                    </div>
+                                                </div>
+                                            </Form.Group>
+                                        </div>
+                                    ))}
                                 </div>
                             </Form>
                         </div>
@@ -439,13 +652,13 @@ const AddServiceDetails = () => {
                                                     height: 250,
                                                     menubar: false,
                                                     plugins: [
-                                                        'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                                        'autolink',
                                                         'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                                                        'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                        'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                                                     ],
                                                     toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                                                         'alignleft aligncenter alignright alignjustify | ' +
-                                                        'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                                        'bullist numlist  outdent indent | removeformat |  code table help'
                                                 }}
                                                 onEditorChange={(content) => setServiceSectionDescription(content)}
                                             />
@@ -488,42 +701,6 @@ const AddServiceDetails = () => {
                                         />
                                     </div>
 
-                                </Form.Group>
-                                <Form.Group className="row form-group" controlId="platformUsers">
-                                    <div className="col-12 col-md-3">
-                                        <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
-                                            Sub Services
-                                        </Form.Label>
-                                    </div>
-
-                                    <div className="col-12 col-md-9 mt-0">
-                                        {subServices && subServices.length > 0 ? (
-                                            <Accordion>
-                                                <Accordion.Item className="border" eventKey="0">
-                                                    <Accordion.Header >Select Sub Services</Accordion.Header>
-                                                    <Accordion.Body>
-                                                        <div className="p-3">
-                                                            {subServices.map((subService) => (
-                                                                <Form.Check
-                                                                    key={subService.id}
-                                                                    type="checkbox"
-                                                                    id={`subservice-${subService.id}`}
-                                                                    label={subService.title}
-                                                                    checked={selectedSubServices.includes(subService.id)}
-                                                                    onChange={() => handleSubServiceChange(subService.id)}
-                                                                    className="mb-2 p-2"
-                                                                />
-                                                            ))}
-                                                        </div>
-                                                    </Accordion.Body>
-                                                </Accordion.Item>
-                                            </Accordion>
-                                        ) : (
-                                            <div className="text-muted">
-                                                {selectedService ? "No sub-services available" : "Please select a service first"}
-                                            </div>
-                                        )}
-                                    </div>
                                 </Form.Group>
                             </Form>
                         </div>
@@ -573,19 +750,180 @@ const AddServiceDetails = () => {
                                                     height: 250,
                                                     menubar: false,
                                                     plugins: [
-                                                        'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                                        'autolink',
                                                         'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                                                        'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                        'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                                                     ],
                                                     toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                                                         'alignleft aligncenter alignright alignjustify | ' +
-                                                        'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                                        'bullist numlist  outdent indent | removeformat |  code table help'
                                                 }}
                                                 onEditorChange={(content) => setServiceIndustryDescription(content)}
                                             />
                                         )}
                                     </div>
                                 </Form.Group>
+                            </Form>
+
+                        </div>
+                    </div>
+                    <div className="card mt-3">
+                        {/* <!-- card header start here  --> */}
+                        <div className="card-header">
+                            <div
+                                className="card-title d-flex justify-content-between align-items-center"
+                            >
+                                <h2>Service Solutions</h2>
+                                {/* <!-- <a href="add_header.html" className="btn sub_btn">ADD</a> --> */}
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <Form className="upload-form">
+                                <div className="mb-3 pb-3">
+
+
+                                    {serviceSolution.map((info, index) => (
+                                        <div key={index} className="mb-4 border-bottom pb-3">
+                                            <Form.Group className="row form-group">
+                                                <div className="col-12 col-md-4">
+                                                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                        Title
+                                                    </Form.Label>
+                                                </div>
+                                                <div className="col-12 col-md-8 mt-0">
+                                                    <div className="d-flex">
+                                                        <Form.Control
+                                                            type="text"
+                                                            value={serviceSolution.title}
+                                                            onChange={(e) => handleServiceSolutionChange(index, 'title', e.target.value)}
+                                                            placeholder="Enter title..."
+                                                            required
+                                                            className={`form-control form-control-lg form-input`}
+                                                        />
+                                                        <Button
+                                                            className="bg-transparent border-0"
+                                                            onClick={index === 0 ? addServiceSolution : () => removeServiceSolution(index)}
+                                                        >
+                                                            {index === 0 ? (
+                                                                <IoIosAdd color="gray" size={25} />
+                                                            ) : (
+                                                                <IoIosClose color="gray" size={25} />
+                                                            )}
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </Form.Group>
+
+                                            <Form.Group className="row form-group mt-3">
+                                                <div className="col-12 col-md-4">
+                                                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                        Description
+                                                    </Form.Label>
+                                                </div>
+                                                <div className="col-12 col-md-8 mt-0">
+                                                    <Form.Control
+                                                        as="textarea"
+                                                        value={serviceSolution.description}
+                                                        onChange={(e) => handleServiceSolutionChange(index, 'description', e.target.value)}
+                                                        rows={4}
+                                                        placeholder="Write your description here..."
+                                                        className={`form-control form-control-lg form-textbox`}
+                                                    />
+                                                </div>
+                                            </Form.Group>
+                                        </div>
+                                    ))}
+                                </div>
+                            </Form>
+                        </div>
+                    </div>
+                    <div className="card mt-3">
+                        {/* <!-- card header start here  --> */}
+                        <div className="card-header">
+                            <div
+                                className="card-title d-flex justify-content-between align-items-center"
+                            >
+                                <h2>Tech we use</h2>
+                                {/* <!-- <a href="add_header.html" className="btn sub_btn">ADD</a> --> */}
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <Form className="upload-form">
+                                <div className="mb-3 pb-3">
+                                    {techSections.map((section, sectionIndex) => (
+                                        <div key={sectionIndex} className="mb-4 border-bottom pb-3">
+                                            <Form.Group className="row form-group">
+                                                <div className="col-12 col-md-4">
+                                                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                        Title
+                                                    </Form.Label>
+                                                </div>
+                                                <div className="col-12 col-md-8 mt-0">
+                                                    <div className="d-flex">
+                                                        <Form.Control
+                                                            type="text"
+                                                            value={section.title}
+                                                            onChange={(e) => handleTechSectionChange(sectionIndex, 'title', e.target.value)}
+                                                            placeholder="Enter title..."
+                                                            required
+                                                            className={`form-control form-control-lg form-input`}
+                                                        />
+                                                        <Button
+                                                            className="bg-transparent border-0"
+                                                            onClick={sectionIndex === 0 ? addTechSection : () => removeTechSection(sectionIndex)}
+                                                        >
+                                                            {sectionIndex === 0 ? (
+                                                                <IoIosAdd color="gray" size={25} />
+                                                            ) : (
+                                                                <IoIosClose color="gray" size={25} />
+                                                            )}
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </Form.Group>
+                                            <div>
+                                                {/* Show selected technologies for the current section */}
+                                                <div className="d-flex flex-wrap justify-content-center align-items-center gap-2 mb-2">
+                                                    {section.technologies && section.technologies.map((tech, index) => (
+                                                        <div key={index} className="d-flex bg-primary text-white p-2 rounded-2 justify-content-center align-items-center gap-2 ">
+                                                            <Image
+                                                                src={tech.image}
+                                                                alt="technology"
+                                                                width={20}
+                                                                height={20}
+                                                                className="object-fit-contain"
+                                                            />
+                                                            {tech.title}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <Accordion>
+                                                <Accordion.Item eventKey="0">
+                                                    <div style={{ height: "0px", borderBottom: "1px solid #e5e5e5" }}>
+
+                                                        <Accordion.Header className="border "
+                                                        >Technology</Accordion.Header>
+                                                    </div>
+                                                    <Accordion.Body className="mt-2 border" style={{ height: "200px", overflowY: "scroll", scrollbarWidth: "thin" }}>
+                                                        {technologies?.map((tech, techIndex) => (
+                                                            <Form.Group key={techIndex} className="row form-group">
+                                                                <div className="col-12 col-md-8 mt-0">
+                                                                    <Form.Check
+                                                                        type="checkbox"
+                                                                        checked={section.technologies.some((t) => t.id === tech.id)}
+                                                                        onChange={() => handleTechSelection(sectionIndex, tech)}
+                                                                        label={tech.title}
+                                                                    />
+                                                                </div>
+                                                            </Form.Group>
+                                                        ))}
+                                                    </Accordion.Body>
+                                                </Accordion.Item>
+                                            </Accordion>
+                                        </div>
+                                    ))}
+                                </div>
                             </Form>
                         </div>
                     </div>

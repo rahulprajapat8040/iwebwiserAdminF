@@ -349,7 +349,7 @@ const AddCaseStudy = () => {
             </div>
             <div className="card-body px-4">
               <Form className="upload-form">
-                <Form.Group className="mb-3 row form-group mt-1 mt-md-2" controlId="caseTitle">
+                <Form.Group className="mb-3 row form-group mt-1 mt-md-2" controlId="caseSlug">
                   <Form.Label
                     column
                     md={3}
@@ -360,7 +360,7 @@ const AddCaseStudy = () => {
                   <div className="col-12 col-md-8 mt-0">
                     <Form.Control
                       type="text"
-                      placeholder="Enter Case Title..."
+                      placeholder="eg:  my-case"
                       className={`form-control form-control-lg form-input`}
                       value={slug}
                       onChange={(e) => setSlug(e.target.value)}
@@ -477,13 +477,13 @@ const AddCaseStudy = () => {
                           height: 250,
                           menubar: false,
                           plugins: [
-                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'autolink',
                             'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                            'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                           ],
                           toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                             'alignleft aligncenter alignright alignjustify | ' +
-                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                            'bullist numlist  outdent indent | removeformat |  code table help'
                         }}
                         onEditorChange={(content) => setCaseStudy((prevCaseStudy) => ({
                           ...prevCaseStudy,
@@ -508,13 +508,13 @@ const AddCaseStudy = () => {
                           height: 250,
                           menubar: false,
                           plugins: [
-                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'autolink',
                             'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                            'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                           ],
                           toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                             'alignleft aligncenter alignright alignjustify | ' +
-                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                            'bullist numlist  outdent indent | removeformat |  code table help'
                         }}
                         onEditorChange={(content) => setCaseStudy((prevCaseStudy) => ({
                           ...prevCaseStudy,
@@ -657,7 +657,7 @@ const AddCaseStudy = () => {
                 </Form.Group>
                 <Form.Group
                   className="row form-group"
-                  controlId=" uploadImage"
+                  controlId=" uploadMainImage"
                 >
                   <div className="col-12 col-md-4">
                     <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
@@ -822,13 +822,13 @@ const AddCaseStudy = () => {
                           height: 250,
                           menubar: false,
                           plugins: [
-                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'autolink',
                             'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                            'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                           ],
                           toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                             'alignleft aligncenter alignright alignjustify | ' +
-                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                            'bullist numlist  outdent indent | removeformat |  code table help'
                         }}
                         onEditorChange={(content) => setChallenges((prevChallenges) => ({
                           ...prevChallenges,
@@ -857,13 +857,13 @@ const AddCaseStudy = () => {
                           height: 250,
                           menubar: false,
                           plugins: [
-                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'autolink',
                             'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                            'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                           ],
                           toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                             'alignleft aligncenter alignright alignjustify | ' +
-                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                            'bullist numlist  outdent indent | removeformat |  code table help'
                         }}
                         onEditorChange={(content) => setChallenges((prevChallenges) => ({
                           ...prevChallenges,
@@ -948,13 +948,13 @@ const AddCaseStudy = () => {
                           height: 250,
                           menubar: false,
                           plugins: [
-                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'autolink',
                             'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                            'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                           ],
                           toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                             'alignleft aligncenter alignright alignjustify | ' +
-                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                            'bullist numlist  outdent indent | removeformat |  code table help'
                         }}
                         onEditorChange={(content) => setAddImpact((prevAddImpact) => ({
                           ...prevAddImpact,
@@ -986,13 +986,13 @@ const AddCaseStudy = () => {
                           height: 250,
                           menubar: false,
                           plugins: [
-                            'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                            'autolink',
                             'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                            'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                           ],
                           toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                             'alignleft aligncenter alignright alignjustify | ' +
-                            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                            'bullist numlist  outdent indent | removeformat |  code table help'
                         }}
                         onEditorChange={(content) => setAddImpact((prevAddImpact) => ({
                           ...prevAddImpact,

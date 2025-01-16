@@ -89,12 +89,12 @@ const AddField = () => {
                     >
                         <IoMdArrowBack color="white" size={25} />
                     </div>
-                    <h4 className={`m-0 ${styles.xlFont}`}>Add Field</h4>
+                    <h4 className={`m-0 ${styles.xlFont}`}>Add Service </h4>
                 </div>
                 <div className="card">
                     <div className="card-header">
                         <div className="card-title d-flex justify-content-between align-items-center">
-                            <h2>Add Field</h2>
+                            <h2>Add Service</h2>
                         </div>
                     </div>
                     <div className="card-body px-md-4">
@@ -108,7 +108,7 @@ const AddField = () => {
                                 <div className="col-12 col-md-8 me-5 mt-0">
                                     <Form.Control
                                         type="text"
-                                        placeholder="eg. field-slug"
+                                        placeholder="eg. service-slug"
                                         value={slug}
                                         onChange={(e) => setSlug(e.target.value)}
                                         className="form-control form-control-lg form-input"
@@ -119,46 +119,18 @@ const AddField = () => {
                             <Form.Group className="row form-group mt-1 mt-md-2">
                                 <div className="col-12 col-md-3">
                                     <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                                        Field Name
+                                        Service Name
                                     </Form.Label>
                                 </div>
                                 <div className="col-12 col-md-8 me-5 mt-0">
                                     <Form.Control
                                         type="text"
-                                        placeholder="Enter Field Name..."
+                                        placeholder="Enter Service Name..."
                                         value={fieldName}
                                         onChange={(e) => setFieldName(e.target.value)}
                                         className="form-control form-control-lg form-input"
                                         required
                                     />
-                                </div>
-                            </Form.Group>
-                            <Form.Group className="row form-group mt-1 mt-md-2">
-                                <div className="col-12 col-md-3">
-                                    <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                                       Short Description
-                                    </Form.Label>
-                                </div>
-                                <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
-                                    {isClient && (
-                                        <Editor
-                                            apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
-                                            value={fieldShortDescription}
-                                            init={{
-                                                height: 250,
-                                                menubar: false,
-                                                plugins: [
-                                                    'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
-                                                    'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                                                    'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
-                                                ],
-                                                toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
-                                                    'alignleft aligncenter alignright alignjustify | ' +
-                                                    'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
-                                            }}
-                                            onEditorChange={(content) => setFieldShortDescription(content)}
-                                        />
-                                    )}
                                 </div>
                             </Form.Group>
                             <Form.Group className="row form-group mt-1 mt-md-2">
@@ -176,13 +148,13 @@ const AddField = () => {
                                                 height: 250,
                                                 menubar: false,
                                                 plugins: [
-                                                    'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                                    'autolink', 
                                                     'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                                                    'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                     'fullscreen',  'insertdatetime', 'media', 'table', 'help', 'wordcount',
                                                 ],
                                                 toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                                                     'alignleft aligncenter alignright alignjustify | ' +
-                                                    'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                                    'bullist numlist  outdent indent | removeformat |  code table help'
                                             }}
                                             onEditorChange={(content) => setFieldDescription(content)}
                                         />
@@ -227,7 +199,7 @@ const AddField = () => {
                                         htmlFor="inputClientFile"
                                         className="col-form-label form-label d-flex justify-content-left justify-content-md-center"
                                     >
-                                        Upload Logo
+                                        Upload Image
                                     </Form.Label>
                                 </div>
                                 <div className="col-12 col-md-8 mt-0 me-5">

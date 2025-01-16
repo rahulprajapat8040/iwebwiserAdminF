@@ -7,7 +7,7 @@ import { getAllSubChildLinkPagesReducer } from "./features/GetAllLinkPages";
 import { getAllBannerReducer } from "./features/GetBanner";
 import { getAllClientReducer } from "./features/GetClients";
 import { getAllBlogReducer } from "./features/GetAllBlogs";
-import { getAllTechnologyReducer } from "./features/GetAllTechnologies";
+import { getAllTechnologyFullReducer, getAllTechnologyReducer } from "./features/GetAllTechnologies";
 import { getAllServicesFullReducer, getAllServicesReducer } from "./features/GetAllServices";
 import { getAllIndustryReducer } from "./features/GetAllIndustry";
 import { getAllCertificatesReducer } from "./features/GetAllCertificates";
@@ -34,6 +34,7 @@ export const store = configureStore({
     getAllClient: getAllClientReducer,
     getAllBlog: getAllBlogReducer,
     getAllTechnology: getAllTechnologyReducer,
+    getAllTechnologyFull: getAllTechnologyFullReducer,
     getAllServices: getAllServicesReducer,
     getAllServicesFull: getAllServicesFullReducer,
     getAllServiceDetail: getAllServiceDetailReducer,

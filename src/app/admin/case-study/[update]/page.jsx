@@ -464,7 +464,7 @@ const UpdateCaseStudy = () => {
                                     <div className="col-12 col-md-8 mt-0">
                                         <Form.Control
                                             type="text"
-                                            placeholder="Enter Slug..."
+                                            placeholder="eg: my-case"
                                             className={`form-control form-control-lg form-input`}
                                             value={slug}
                                             onChange={(e) => setSlug(e.target.value)}
@@ -488,13 +488,13 @@ const UpdateCaseStudy = () => {
                                                     height: 250,
                                                     menubar: false,
                                                     plugins: [
-                                                        'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                                        'autolink',
                                                         'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                                                        'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                        'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                                                     ],
                                                     toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                                                         'alignleft aligncenter alignright alignjustify | ' +
-                                                        'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                                        'bullist numlist  outdent indent | removeformat |  code table help'
                                                 }}
                                                 onEditorChange={(content) => setCaseStudy((prevCaseStudy) => ({
                                                     ...prevCaseStudy,
@@ -520,13 +520,13 @@ const UpdateCaseStudy = () => {
                                                     height: 250,
                                                     menubar: false,
                                                     plugins: [
-                                                        'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                                        'autolink',
                                                         'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                                                        'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                        'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                                                     ],
                                                     toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                                                         'alignleft aligncenter alignright alignjustify | ' +
-                                                        'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                                        'bullist numlist  outdent indent | removeformat |  code table help'
                                                 }}
                                                 onEditorChange={(content) => setCaseStudy((prevCaseStudy) => ({
                                                     ...prevCaseStudy,
@@ -836,19 +836,28 @@ const UpdateCaseStudy = () => {
                                         </Form.Label>
                                     </div>
                                     <div className="col-12 col-md-8 mt-0">
-                                        <Form.Control
-                                            as="textarea"
-                                            rows={4}
-                                            cols={30}
-                                            value={Challenges.challeng}
-                                            onChange={(e) => setChallenges((prevChallenges) => ({
-                                                ...prevChallenges,
-                                                challeng: e.target.value
-                                            }))}
-                                            placeholder="write your description here..."
-                                            required
-                                            className={`form-control form-control-lg form-textbox`}
-                                        />
+                                        {isClient && (
+                                            <Editor
+                                                apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                                                value={Challenges.challeng}
+                                                init={{
+                                                    height: 250,
+                                                    menubar: false,
+                                                    plugins: [
+                                                        'autolink',
+                                                        'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                                                        'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                    ],
+                                                    toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                                                        'alignleft aligncenter alignright alignjustify | ' +
+                                                        'bullist numlist  outdent indent | removeformat |  code table help'
+                                                }}
+                                                onEditorChange={(content) => setChallenges((prevChallenges) => ({
+                                                    ...prevChallenges,
+                                                    challeng: content
+                                                }))}
+                                            />
+                                        )}
                                     </div>
                                 </Form.Group>
 
@@ -859,17 +868,28 @@ const UpdateCaseStudy = () => {
                                         </Form.Label>
                                     </div>
                                     <div className="col-12 col-md-8 mt-0">
-                                        <Form.Control
-                                            as="textarea"
-                                            value={Challenges.solution}
-                                            onChange={(e) => setChallenges((prevChallenges) => ({
-                                                ...prevChallenges,
-                                                solution: e.target.value
-                                            }))}
-                                            rows={4}
-                                            placeholder="Write your description here..."
-                                            className={`form-control form-control-lg form-textbox`}
-                                        />
+                                        {isClient && (
+                                            <Editor
+                                                apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                                                value={Challenges.solution}
+                                                init={{
+                                                    height: 250,
+                                                    menubar: false,
+                                                    plugins: [
+                                                        'autolink',
+                                                        'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                                                        'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                    ],
+                                                    toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                                                        'alignleft aligncenter alignright alignjustify | ' +
+                                                        'bullist numlist  outdent indent | removeformat |  code table help'
+                                                }}
+                                                onEditorChange={(content) => setChallenges((prevChallenges) => ({
+                                                    ...prevChallenges,
+                                                    solution: content
+                                                }))}
+                                            />
+                                        )}
                                     </div>
                                 </Form.Group>
 
@@ -944,18 +964,28 @@ const UpdateCaseStudy = () => {
                                         </Form.Label>
                                     </div>
                                     <div className="col-12 col-md-8 mt-0">
-                                        <Form.Control
-                                            as="textarea"
-                                            value={addImpact.businessImpact}
-                                            onChange={(e) => setAddImpact((prevAddImpact) => ({
-                                                ...prevAddImpact,
-                                                businessImpact: e.target.value
-                                            }))}
-                                            rows={4}
-                                            placeholder="write your description here..."
-                                            required
-                                            className={`form-control form-control-lg form-textbox`}
-                                        />
+                                        {isClient && (
+                                            <Editor
+                                                apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                                                value={addImpact.businessImpact}
+                                                init={{
+                                                    height: 250,
+                                                    menubar: false,
+                                                    plugins: [
+                                                        'autolink',
+                                                        'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                                                        'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                    ],
+                                                    toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                                                        'alignleft aligncenter alignright alignjustify | ' +
+                                                        'bullist numlist  outdent indent | removeformat |  code table help'
+                                                }}
+                                                onEditorChange={(content) => setAddImpact((prevAddImpact) => ({
+                                                    ...prevAddImpact,
+                                                    businessImpact: content
+                                                }))}
+                                            />
+                                        )}
                                     </div>
                                 </Form.Group>
 
@@ -966,17 +996,28 @@ const UpdateCaseStudy = () => {
                                         </Form.Label>
                                     </div>
                                     <div className="col-12 col-md-8 mt-0">
-                                        <Form.Control
-                                            as="textarea"
-                                            value={addImpact.userImpact}
-                                            onChange={(e) => setAddImpact((prevAddImpact) => ({
-                                                ...prevAddImpact,
-                                                userImpact: e.target.value
-                                            }))}
-                                            rows={4}
-                                            placeholder="Write your description here..."
-                                            className={`form-control form-control-lg form-textbox`}
-                                        />
+                                        {isClient && (
+                                            <Editor
+                                                apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
+                                                value={addImpact.userImpact}
+                                                init={{
+                                                    height: 250,
+                                                    menubar: false,
+                                                    plugins: [
+                                                        'autolink',
+                                                        'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                                                        'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                                    ],
+                                                    toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                                                        'alignleft aligncenter alignright alignjustify | ' +
+                                                        'bullist numlist  outdent indent | removeformat |  code table help'
+                                                }}
+                                                onEditorChange={(content) => setAddImpact((prevAddImpact) => ({
+                                                    ...prevAddImpact,
+                                                    userImpact: content
+                                                }))}
+                                            />
+                                        )}
                                     </div>
                                 </Form.Group>
 

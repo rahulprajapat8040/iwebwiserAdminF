@@ -124,7 +124,7 @@ const NavBar = () => {
             className={`d-flex flex-column justify-content-center ${isMobile ? "d-none" : ""}`}
           >
             <span
-            className="m-0"
+            className="m-0 text-black"
               style={{ fontSize: "12px", fontWeight: "600", lineHeight: "1.2" }}
             >
               {admin?.username}

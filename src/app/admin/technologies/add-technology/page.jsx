@@ -1,6 +1,5 @@
 "use client";
-import { Container, Row, Col, Form, Button, Toast } from "react-bootstrap";
-import { IoMdArrowBack, IoMdArrowDropdown } from "react-icons/io";
+import {  Form, Button, Toast } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import styles from "@/assets/css/base.module.css";
@@ -10,19 +9,11 @@ import { BsCloudUpload } from "react-icons/bs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ImagePreview from "@/components/Modals/ImagePreview";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllSubServicesFull } from "@/lib/redux/features/GetAllSubServices";
 const AddTechnology = () => {
-  const dispatch = useDispatch();
-  const { subServices } = useSelector((state) => state.getAllSubServicesFull);
-  const [subServiceId, setSubServiceId] = useState("");
   const [imagePreview, setImagePreview] = useState(false);
   const [technologyTitle, setTechnologyTitle] = useState("");
   const [technologyImage, setTechnologyImage] = useState(null);
   const router = useRouter();
-  useEffect(() => {
-      dispatch(getAllSubServicesFull());
-  }, []);
 
   // HANDLE IAMGE UPLOAD
 
@@ -47,14 +38,11 @@ const AddTechnology = () => {
     e.preventDefault();
     try {
       const response = await axios.post(Apis.createTechnology, {
-        sub_service_id: subServiceId,
         title: technologyTitle,
         image: technologyImage,
       });
       toast.success(response.data.message);
       // Clear the input fields and increment the index for the next branch
-      setServiceId("");
-      setSubServiceId("");
       setTechnologyTitle("");
       setTechnologyImage(null);
     } catch (error) {
@@ -110,30 +98,6 @@ const AddTechnology = () => {
 
             <div className="card-body">
               <Form className="upload-form" onSubmit={handleAddTechnology}>
-
-                {/* Add SubService Selection Dropdown */}
-                <Form.Group className="row form-group mt-1 mt-md-2">
-                  <div className="col-12 col-md-3">
-                    <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                      Select SubService
-                    </Form.Label>
-                  </div>
-                  <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
-                    <Form.Select
-                      value={subServiceId}
-                      onChange={(e) => setSubServiceId(e.target.value)}
-                      className="form-control form-control-lg form-input"
-                      required
-                    >
-                      <option value="">Select a SubService</option>
-                      {subServices.map((subService) => (
-                        <option key={subService.id} value={subService.id}>
-                          {subService.title}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </div>
-                </Form.Group>
 
                 <Form.Group className="row form-group mt-1 mt-md-2">
                   <div className="col-12 col-md-3">

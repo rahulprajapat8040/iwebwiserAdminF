@@ -20,6 +20,21 @@ export const getAllTechnology = createAsyncThunk(
   }
 );
 
+export const getAllTechnologyFull = createAsyncThunk(
+  "getAllTechnologyFull", 
+  async () => {
+    try {
+      const response = await axios.get(`${Apis.getAllTechnologyFull}`);
+      return {
+        technologys: response.data.data.technologys,
+      };
+    } catch (error) {
+      console.error(error);
+      return error.response.data;
+    }
+  }
+)
+
 
 export const getAllTechnologySlice = createSlice({
   name: "getAllTechnology",
@@ -44,4 +59,27 @@ export const getAllTechnologySlice = createSlice({
   },
 });
 
+export const getAllTechnologyFullSlice = createSlice({
+  name: "getAllTechnologyFull",
+  initialState: {
+    technologies: [],
+    isLoading: false,
+    error: "",
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getAllTechnologyFull.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getAllTechnologyFull.fulfilled, (state, action) => {  
+      state.technologies = action.payload.technologys;
+      state.isLoading = false;
+    });
+    builder.addCase(getAllTechnologyFull.rejected, (state, action) => {
+      state.error = action.error.message;
+      state.isLoading = false;
+    });
+  },
+});
+
 export const getAllTechnologyReducer = getAllTechnologySlice.reducer;
+export const getAllTechnologyFullReducer = getAllTechnologyFullSlice.reducer;

@@ -81,7 +81,7 @@ const AddServiceFaq = () => {
                 <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
               </svg>
             </div>
-            <h4 className={`main-title`}>Add Service FAQ</h4>
+            <h4 className={`main-title`}>Add FAQ</h4>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ const AddServiceFaq = () => {
         <div className="card">
           <div className="card-header">
             <div className="card-title d-flex justify-content-between align-items-center">
-              <h2>Add Service FAQ</h2>
+              <h2>Add FAQ</h2>
             </div>
           </div>
 
@@ -99,7 +99,7 @@ const AddServiceFaq = () => {
               <Form.Group className="row form-group mt-1 mt-md-2">
                 <div className="col-12 col-md-3">
                   <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                    Select Service
+                    Select Sub Service <span className="text-danger">*</span>
                   </Form.Label>
                 </div>
                 <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
@@ -109,7 +109,7 @@ const AddServiceFaq = () => {
                     onChange={(e) => setServiceId(e.target.value)}
                     className="form-control form-control-lg form-input"
                   >
-                    <option value="">Select a Service</option>
+                    <option value="">Select a Sub Service</option>
                     {services.map((service) => (
                       <option key={service.id} value={service.id}>
                         {service.title}

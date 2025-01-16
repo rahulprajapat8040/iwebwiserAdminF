@@ -24,7 +24,7 @@ import { useSelector } from "react-redux";
 
 const AdminDrawer = () => {
   const pathname = usePathname();
-  const isActive = (path) => pathname === path;
+  const isActive = (path) => pathname.includes(path);
   const { showDrawer } = useSelector((state) => state.hideShowDrawer);
 
   const [openMenus, setOpenMenus] = useState(null);
@@ -98,34 +98,33 @@ const AdminDrawer = () => {
       ],
     },
     {
-      title: "Fields",
+      title: "Service",
       link: "/admin/field/add-field",
       icon: <IoCodeSlash size={25} />,
       subItems: [
-        { title: "Add Field", link: "/admin/field/add-field" },
-        { title: "Field List", link: "/admin/field/field-list" },
+        { title: "Add Service", link: "/admin/field/add-field" },
+        { title: "Service List", link: "/admin/field/field-list" },
       ],
     },
     {
-      title: "Services",
+      title: "Sub services",
       link: "/admin/services/add-service",
       icon: <RiUserSettingsLine size={25} />,
       subItems: [
         { title: "Service List", link: "/admin/services/service-list" },
-        { title: "Sub Service", link: "/admin/services/sub-service-list" },
-        { title: "Service Faq List", link: "/admin/services/faq-list" },
-        { title: "Service Details", link: "/admin/services/service-detail-list" },
+        { title: "Sub Service Faq", link: "/admin/services/faq-list" },
+        { title: "Sub Service Details", link: "/admin/services/service-detail-list" },
       ],
     },
-    {
-      title: "Setps",
-      link: "/admin/setps/add-setp",
-      icon: <RiUserSettingsLine size={25} />,
-      subItems: [
-        {title: "Add Setp", link: "/admin/steps/add-steps"},
-        { title: "Setp List", link: "/admin/setps/setp-list" },
-      ],
-    },
+    // {
+    //   title: "Setps",
+    //   link: "/admin/setps/add-setp",
+    //   icon: <RiUserSettingsLine size={25} />,
+    //   subItems: [
+    //     {title: "Add Setp", link: "/admin/steps/add-steps"},
+    //     { title: "Setp List", link: "/admin/setps/setp-list" },
+    //   ],
+    // },
     {
       title: "Industry",
       link: "/admin/industry/add-industry",
@@ -230,10 +229,23 @@ const AdminDrawer = () => {
           >
             <IoHomeOutline size={20} /> {showDrawer && "Dashboard"}
           </Link>
+          
           {menuItems.map((item, index) => {
-            const isParentActive = item.subItems?.some((subItem) =>
-              isActive(subItem.link || [])
-            );
+      // Extract the main keyword from the parent link
+      const parentKeyword = item.link.split('/').filter(Boolean)[1];
+
+      // Function to check if a keyword exists in the current route
+      const isKeywordInRoute = (keyword) => {
+        return pathname.includes(keyword);
+      };
+
+      // Check if the parent should be active based on the parent keyword or sub-item keywords
+      const isParentActive = isKeywordInRoute(parentKeyword) || 
+        item.subItems?.some((subItem) => {
+          const subItemKeyword = subItem.link.split('/').filter(Boolean)[1];
+          console.log(subItemKeyword);
+          return isKeywordInRoute(subItemKeyword);
+        });
 
             return (
               <div key={index}>
@@ -269,7 +281,7 @@ const AdminDrawer = () => {
                 ) : (
                   <Link
                     href={item.link}
-                    className={`d-flex align-items-center gap-3 pb-1 ${isActive(item.link) ? "text-primary" : "text-secondary"
+                    className={`d-flex align-items-center gap-3 pb-1 ${isActive(item.title) ? "text-primary" : "text-secondary"
                       }`}
                     style={{ fontSize: "14px" }}
                   >

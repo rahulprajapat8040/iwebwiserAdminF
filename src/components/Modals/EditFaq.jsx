@@ -75,9 +75,14 @@ const EditFaq = ({ show, setShowEdit, selectedFaq }) => {
               init={{
                 height: 250,
                 menubar: false,
-                plugins: ["link", "lists", "image", "media"],
-                toolbar:
-                  "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link",
+                plugins: [
+                  'autolink',
+                  'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                  'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                ],
+                toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                  'alignleft aligncenter alignright alignjustify | ' +
+                  'bullist numlist  outdent indent | removeformat |  code table help'
               }}
               onEditorChange={(content) => setFaqAnswer(content)}
             />

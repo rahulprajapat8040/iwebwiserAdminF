@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
             style={{
               backgroundColor: "#f2f4ffbf",
               overflowY: "auto",
-              scrollbarWidth: "none",
+              scrollbarWidth: "thin",
             }}
           >
             <h6 className="text-end d-none d-md-block text-capitalize text-primary">

@@ -102,13 +102,13 @@ const EditIndustry = ({ show, setShowEdit, selectedIndustry }) => {
                     height: 250,
                     menubar: false,
                     plugins: [
-                      'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                      'autolink',
                       'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                      'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                      'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                     ],
                     toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                       'alignleft aligncenter alignright alignjustify | ' +
-                      'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                      'bullist numlist  outdent indent | removeformat |  code table help'
                   }}
                   onEditorChange={(content) => setdescription(content)}
                 />
