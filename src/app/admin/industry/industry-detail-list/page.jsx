@@ -50,7 +50,7 @@ const ServiceDetailList = () => {
     }, [dispatch]);
 
     const handleEditClick = (industryDetail) => {
-        router.push(`/admin/services/edit-industryDetail/${industryDetail.id}`);
+        router.push(`/admin/industry/edit-industryDetail/${industryDetail.id}`);
     };
 
 
@@ -87,7 +87,7 @@ const ServiceDetailList = () => {
                         <div className="card-header">
                             <div className="card-title d-flex justify-content-between align-items-center">
                                 <h2>Service Details List</h2>
-                                <Link href="/admin/services/service-details" className="btn sub_btn">ADD</Link>
+                                <Link href="/admin/industry/industry-detail" className="btn sub_btn">ADD</Link>
                             </div>
                         </div>
                         <Row className="justify-content-center">

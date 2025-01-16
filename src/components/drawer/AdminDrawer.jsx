@@ -130,8 +130,8 @@ const AdminDrawer = () => {
       link: "/admin/industry/add-industry",
       icon: <FaGears size={25} />,
       subItems: [
-        { title: "Add Industry", link: "/admin/industry/add-industry" },
         { title: "Industry List", link: "/admin/industry/industry-list" },
+        {title: "Industry Detail", link: "/admin/industry/industry-detail-list"},
       ],
     },
     {

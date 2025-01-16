@@ -1,6 +1,6 @@
 // const BaseUrl = "https://b5123341-8001.inc1.devtunnels.ms/api/v1";
-const BaseUrl = "http://213.210.21.175:8001/api/v1";
-// const BaseUrl = "http://localhost:8001/api/v1";
+// const BaseUrl = "http://213.210.21.175:8001/api/v1";
+const BaseUrl = "http://localhost:8001/api/v1";
 
 export const Apis = {
   // admin apis
