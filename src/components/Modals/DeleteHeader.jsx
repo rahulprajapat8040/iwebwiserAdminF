@@ -8,7 +8,6 @@ const DeleteHeader = ({ show, setShowDelete, selectedHeader }) => {
   const dispatch = useDispatch();
   const handleDelete = async () => {
     try {
-      console.log(selectedHeader?.id);
       const response = await axios.delete(
         `${Apis.deleteHeader}/${selectedHeader?.id}`
       );

@@ -30,7 +30,6 @@ const AddSection = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(res);
       setBannerImgUrl(res.data.url);
     } catch (error) {
       console.log(error);

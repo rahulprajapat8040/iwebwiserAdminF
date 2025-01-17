@@ -60,7 +60,6 @@ const AddService = () => {
         image,
         field_id: selectedField // Add field_id to request
       });
-      console.log(response);
       toast.success(response.data.message);
       // Clear the input fields
       setTitle("");

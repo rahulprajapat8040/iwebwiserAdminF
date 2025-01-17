@@ -68,7 +68,6 @@ export default function Profile() {
             const formData = new FormData();
             formData.append('file', e.target.files[0]);
             const response = await axios.post(Apis.uploadFile, formData);
-            console.log(response)
             if (response) {
                 const res = await axios.put(`${Apis.updateProfilepic}/${admin?.id}`, {
                     image: response.data.url

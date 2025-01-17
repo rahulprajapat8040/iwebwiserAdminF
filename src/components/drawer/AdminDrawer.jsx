@@ -243,7 +243,6 @@ const AdminDrawer = () => {
       const isParentActive = isKeywordInRoute(parentKeyword) || 
         item.subItems?.some((subItem) => {
           const subItemKeyword = subItem.link.split('/').filter(Boolean)[1];
-          console.log(subItemKeyword);
           return isKeywordInRoute(subItemKeyword);
         });
 

@@ -35,7 +35,7 @@ const AddCaseStudy = () => {
       const res = await axios.get(`${Apis.getAllIndustryFull}`);
       setIndustries(res.data.data.industryData)
     } catch (error) {
-      console.log(res)
+      console.log(error)
     }
 
   }

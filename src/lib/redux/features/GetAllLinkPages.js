@@ -11,7 +11,6 @@ export const getAllSubLinkPages = createAsyncThunk(
   "getAllSubLinkPages",
   async () => {
     const response = await axios.get(Apis.getAllSubLinkPages);
-    console.log(response)
     return response.data;
   }
 );

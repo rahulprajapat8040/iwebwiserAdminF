@@ -33,7 +33,6 @@ const AddServiceDetails = () => {
         dispatch(getAllTechnologyFull())
     }, [])
 
-    console.log(technologies)
 
     useEffect(() => {
         dispatch(getSubServiceById(selectedService));
@@ -182,7 +181,6 @@ const AddServiceDetails = () => {
             };
 
             const res = await axios.post(`${Apis.AddServiceDetails}`, serviceData);
-            console.log(res)
             toast.success(res.data.message);
             // Reset all form fields
             setSelectedService(null);

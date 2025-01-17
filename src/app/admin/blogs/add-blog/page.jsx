@@ -30,7 +30,6 @@ const AddBlog = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(res);
       setBlogImage(res.data.url);
     } catch (error) {
       console.log(error);

@@ -10,7 +10,6 @@ import { getSteps } from "@/lib/redux/features/GetAllSteps";
 
 const EditStep = ({ show, setShowEdit, selectedStep }) => {
     const dispatch = useDispatch();
-console.log(selectedStep)
     useEffect(() => {
         setStepTitle(selectedStep?.title || "");
         setDescription(selectedStep?.description || "");

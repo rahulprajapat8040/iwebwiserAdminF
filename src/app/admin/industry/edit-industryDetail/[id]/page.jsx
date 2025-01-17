@@ -46,7 +46,6 @@ const EditIndustryDetail = () => {
         const fetchIndustryDetail = async () => {
             try {
                 const response = await axios.get(`${Apis.getIndustryDetailById}/${id}`);
-                console.log("Industry detail:", response.data);
                 const data = response.data;
                 setSlug(data?.slug);
                 setSelectedIndustry(data?.industry_id);

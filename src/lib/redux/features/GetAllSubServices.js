@@ -40,7 +40,6 @@ export const getAllSubServicesFull = createAsyncThunk(
   async () => { 
     try {
       const response = await axios.get(`${Apis.getAllSubServicesFull}`);
-      console.log(response)
       return {
         subServices: response.data.data.subServices,
       };

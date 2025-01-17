@@ -32,7 +32,7 @@ const UpdateCaseStudy = () => {
             const res = await axios.get(`${Apis.getAllIndustryFull}`);
             setIndustries(res.data.data.industryData)
         } catch (error) {
-            console.log(res)
+            console.log(error)
         }
 
     }
@@ -55,7 +55,6 @@ const UpdateCaseStudy = () => {
         mainImage: "",
     });
 
-    console.log(caseStudy.productName)
     const [userCertificate, setUserCertificate] = useState({
         certificateImage: []
     });
@@ -232,7 +231,6 @@ const UpdateCaseStudy = () => {
                 ...prevCaseStudy,
                 image: uploadedImageUrl,
             }));
-            console.log(response)
             toast.success("Case study image uploaded successfully");
 
         } catch (error) {
@@ -372,7 +370,6 @@ const UpdateCaseStudy = () => {
                 addtional_information: additionalInfo
             });
             toast.success(res.data.message);
-            console.log(res);
         } catch (error) {
             console.log(error);
         }

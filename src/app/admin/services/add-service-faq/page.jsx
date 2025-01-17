@@ -30,7 +30,6 @@ const AddServiceFaq = () => {
       try {
         const response = await axios.get(`${Apis.getAllServicesFull}`);
         setServices(response.data.data.services);
-        console.log(response)
       } catch (error) {
         console.error("Failed to fetch services", error);
       }
