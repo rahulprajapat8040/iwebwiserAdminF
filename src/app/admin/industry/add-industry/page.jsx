@@ -1,5 +1,5 @@
 "use client";
-import {  Form, Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { BsCloudUpload } from "react-icons/bs";
 import { Apis } from "@/utils/Apis";
@@ -18,6 +18,7 @@ const AddIndustry = () => {
   const [IndustryButtonLink, setIndustryButtonLink] = useState("");
   const [IndustryImage, setIndustryImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(false);
+  const [alt, setAlt] = useState('')
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -53,16 +54,17 @@ const AddIndustry = () => {
         description: IndustryDescription,
         button_link: IndustryButtonLink,
         image: IndustryImage,
+        alt: alt
       });
       toast.success(response.data.message);
       // Clear the input fields and increment the index for the next branch
       setIndustryTitle("");
       setIndustryDescription("");
-      setIndustryServices("");
       setIndustryButtonLink("");
-      setIndustryImage("");
+      setIndustryImage(null);
+      setAlt("")
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.message);
     }
   };
   return (
@@ -145,13 +147,13 @@ const AddIndustry = () => {
                         height: 250,
                         menubar: false,
                         plugins: [
-                          'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                          'autolink',
                           'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                          'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                          'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                         ],
                         toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                           'alignleft aligncenter alignright alignjustify | ' +
-                          'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                          'bullist numlist  outdent indent | removeformat |  code table help'
                       }}
                       onEditorChange={(content) => setIndustryDescription(content)}
                     />
@@ -218,7 +220,23 @@ const AddIndustry = () => {
                   className="flex-grow-1 p-2"
                 />
               </Form.Group>
-
+              <Form.Group className="row form-group mt-1 mt-md-2">
+                <div className="col-12 col-md-3">
+                  <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
+                    Image Alt
+                  </Form.Label>
+                </div>
+                <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Industry Title"
+                    className="form-control form-control-lg form-input"
+                    style={{ fontSize: "13px" }}
+                    value={alt}
+                    onChange={(e) => setAlt(e.target.value)}
+                  />
+                </div>
+              </Form.Group>
               {/* Submit Button */}
               <div className="row">
                 <div className="col-4 col-md-3"></div>

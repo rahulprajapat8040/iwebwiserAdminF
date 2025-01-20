@@ -8,14 +8,18 @@ import axios from "axios";
 import { Apis } from "@/utils/Apis";
 import { BsCloudUpload } from "react-icons/bs";
 import ImagePreview from "@/components/Modals/ImagePreview";
+import { toast } from "react-toastify";
 
 const AddBanner = () => {
-  const [feedbackTitle, setFeedbackTitle] = useState("");
-  const [feedbackDescription, setFeedbackDescription] = useState("");
-  const [feddbackSubTitile, setfeedbackSubTitle] = useState("");
-  const [feedbackImage, setFeedbackImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(false);
+  const [data, setData] = useState({
+    title: "",
+    description: "",
+    sub_title: "",
+    image: null,
+    alt: ""
+  });
 
+  const [imagePreview, setImagePreview] = useState(false);
   const router = useRouter();
 
   const handleMedia = async (e) => {
@@ -28,27 +32,29 @@ const AddBanner = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setFeedbackImage(res.data.url);
+      setData({ ...data, image: res.data.url });
       toast.success("Client image uploaded successfully");
     } catch (err) {
       console.log(err);
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(Apis.addFeedback, {
-        title: feedbackTitle,
-        description: feedbackDescription,
-        sub_title: feddbackSubTitile,
-        image: feedbackImage,
-      })
-      setFeedbackImage(null);
-      setFeedbackDescription("");
-      setFeedbackTitle("");
-      setfeedbackSubTitle("");
-
+      const res = await axios.post(Apis.addFeedback, data);
+      setData({
+        title: "",
+        description: "",
+        sub_title: "",
+        image: null,
+        alt: ""
+      });
       toast.success(res.data.message);
     } catch (err) {
       console.log(err);
@@ -58,11 +64,9 @@ const AddBanner = () => {
   return (
     <>
       <ToastContainer />
-      {
-        imagePreview && (
-          <ImagePreview image={feedbackImage} setImagePreview={setImagePreview} />
-        )
-      }
+      {imagePreview && (
+        <ImagePreview image={data.image} setImagePreview={setImagePreview} />
+      )}
       <div>
         <div className="d-flex align-items-center gap-3">
           <div
@@ -78,12 +82,8 @@ const AddBanner = () => {
         <div className="container-fluid">
           <div className="card">
             <div className="card-header">
-              <div
-                className="card-title d-flex justify-content-between align-items-center"
-              >
-                <h2 >
-                  Add Feedback
-                </h2>
+              <div className="card-title d-flex justify-content-between align-items-center">
+                <h2>Add Feedback</h2>
               </div>
             </div>
             <div className="card-body px-md-5">
@@ -98,56 +98,59 @@ const AddBanner = () => {
                     <Form.Control
                       type="text"
                       placeholder="Enter Feedback Title"
-                      value={feedbackTitle}
-                      onChange={(e) => setFeedbackTitle(e.target.value)}
+                      name="title"
+                      value={data.title}
+                      onChange={handleChange}
                       className={`form-control form-control-lg form-input`}
                       required
                     />
                   </div>
                 </Form.Group>
-                <Form.Group className="row form-group mt-1 mt-md-2 ">
+
+                <Form.Group className="row form-group mt-1 mt-md-2">
                   <div className="col-12 col-md-3">
                     <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
-                      Feddback Sub-Title
+                      Feedback Sub-Title
                     </Form.Label>
                   </div>
                   <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
                     <Form.Control
                       type="text"
-                      rows={4}
-                      placeholder="Enter Your Feedback Sub Title Here..."
-                      value={feddbackSubTitile}
-                      onChange={(e) => setfeedbackSubTitle(e.target.value)}
+                      placeholder="Enter Feedback Sub Title"
+                      name="sub_title"
+                      value={data.sub_title}
+                      onChange={handleChange}
                       className={`form-control form-control-lg form-input`}
                     />
                   </div>
                 </Form.Group>
-                <Form.Group className="row form-group mt-1 mt-md-2 ">
+
+                <Form.Group className="row form-group mt-1 mt-md-2">
                   <div className="col-12 col-md-3">
                     <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
-                      Feddback Description
+                      Feedback Description
                     </Form.Label>
                   </div>
                   <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
                     <Form.Control
                       as="textarea"
                       rows={4}
-                      placeholder="Enter Your Feedback Description Here..."
-                      value={feedbackDescription}
-                      onChange={(e) => setFeedbackDescription(e.target.value)}
+                      placeholder="Enter Feedback Description"
+                      name="description"
+                      value={data.description}
+                      onChange={handleChange}
                       className={`form-control form-control-lg form-textbox`}
                     />
                   </div>
                 </Form.Group>
 
-                <Form.Group className="row form-group mt-1 mt-md-2 ">
+                <Form.Group className="row form-group mt-1 mt-md-2">
                   <div className="col-12 col-md-3">
                     <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
-                      Upload Banner
+                      Upload Image
                     </Form.Label>
                   </div>
                   <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
-
                     <div
                       className="form-control form-control-lg form-input border d-flex flex-column align-items-center justify-content-center"
                       style={{ height: "150px" }}
@@ -162,13 +165,13 @@ const AddBanner = () => {
                           Upload Image / Icon
                         </h6>
                       </Form.Label>
-                      {feedbackImage && (
+                      {data.image && (
                         <h6
-                          className={`text-center   text-primary ${styles.mdFont}`}
+                          className={`text-center text-primary ${styles.mdFont}`}
                           style={{ cursor: "pointer" }}
                           onClick={() => setImagePreview(true)}
                         >
-                          click to preview
+                          Click to preview
                         </h6>
                       )}
                     </div>
@@ -180,6 +183,25 @@ const AddBanner = () => {
                       onChange={handleMedia}
                       placeholder="Social Link Icon"
                       className="flex-grow-1 p-2"
+                    />
+                  </div>
+                </Form.Group>
+
+                <Form.Group className="row form-group mt-1 mt-md-2">
+                  <div className="col-12 col-md-3">
+                    <Form.Label className={`col-form-label form-label d-flex justify-content-left justify-content-md-center align-items-center`}>
+                      Image Alt
+                    </Form.Label>
+                  </div>
+                  <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter Image Alt"
+                      name="alt"
+                      value={data.alt}
+                      onChange={handleChange}
+                      className={`form-control form-control-lg form-input`}
+                      required
                     />
                   </div>
                 </Form.Group>
@@ -199,7 +221,7 @@ const AddBanner = () => {
             </div>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 };

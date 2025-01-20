@@ -1,5 +1,5 @@
 "use client";
-import {  Form, Button, Toast } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import styles from "@/assets/css/base.module.css";
@@ -9,14 +9,21 @@ import { BsCloudUpload } from "react-icons/bs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ImagePreview from "@/components/Modals/ImagePreview";
+
 const AddTechnology = () => {
   const [imagePreview, setImagePreview] = useState(false);
-  const [technologyTitle, setTechnologyTitle] = useState("");
-  const [technologyImage, setTechnologyImage] = useState(null);
+
+  // Managing form data in a single state object
+  const [data, setData] = useState({
+    title: "",
+    description: "",
+    image: null,
+    alt: "",
+  });
+
   const router = useRouter();
 
-  // HANDLE IAMGE UPLOAD
-
+  // HANDLE IMAGE UPLOAD
   const handleMedia = async (e) => {
     try {
       const formData = new FormData();
@@ -26,25 +33,33 @@ const AddTechnology = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setTechnologyImage(res.data.url);
+      setData((prevData) => ({
+        ...prevData,
+        image: res.data.url,
+      }));
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
 
   // HANDLE TECHNOLOGY ADD
-
   const handleAddTechnology = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(Apis.createTechnology, {
-        title: technologyTitle,
-        image: technologyImage,
+        title: data.title,
+        description: data.description,
+        image: data.image,
+        alt: data.alt,
       });
       toast.success(response.data.message);
-      // Clear the input fields and increment the index for the next branch
-      setTechnologyTitle("");
-      setTechnologyImage(null);
+      // Clear the input fields after successful submission
+      setData({
+        title: "",
+        description: "",
+        image: null,
+        alt: "",
+      });
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -55,7 +70,7 @@ const AddTechnology = () => {
       <ToastContainer />
       {imagePreview && (
         <ImagePreview
-          image={technologyImage}
+          image={data.image}
           setImagePreview={setImagePreview}
         />
       )}
@@ -63,9 +78,7 @@ const AddTechnology = () => {
         <div className="dash-head">
           <div className="dash_title">
             <div onClick={() => router.back()} className="btn  d-inline-flex align-items-center gap-2">
-
               <div
-
                 className="d-inline-block bg-primary p-1 px-2 rounded-3"
                 style={{ cursor: "pointer" }}
               >
@@ -85,42 +98,41 @@ const AddTechnology = () => {
         </div>
 
         <div className="container-fluid">
-
           <div className="card">
-            {/* <!-- card header start here  --> */}
+            {/* Card header start here */}
             <div className="card-header">
-              <div
-                className="card-title d-flex justify-content-between align-items-center"
-              >
+              <div className="card-title d-flex justify-content-between align-items-center">
                 <h2>Add Technology</h2>
               </div>
             </div>
 
             <div className="card-body">
               <Form className="upload-form" onSubmit={handleAddTechnology}>
-
+                {/* Technology Title */}
                 <Form.Group className="row form-group mt-1 mt-md-2">
                   <div className="col-12 col-md-3">
-                    <Form.Label className={`col-form-label form-label d-flex justify-content-left justify-content-md-center`}>
+                    <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
                       Technology Title
                     </Form.Label>
                   </div>
                   <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
                     <Form.Control
                       type="text"
-                      placeholder="Enter Banner Title..."
-                      value={technologyTitle}
-                      onChange={(e) => setTechnologyTitle(e.target.value)}
-                      className={`form-control form-control-lg form-input`}
+                      placeholder="Enter Technology Title..."
+                      value={data.title}
+                      onChange={(e) => setData({ ...data, title: e.target.value })}
+                      className="form-control form-control-lg form-input"
                       required
                     />
                   </div>
                 </Form.Group>
+
+                {/* Upload Image */}
                 <Form.Group className="row form-group mt-1 mt-md-2 ">
                   <div className="col-12 col-md-3">
-                  <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
-                    Upload Image
-                  </Form.Label>
+                    <Form.Label className="col-form-label form-label d-flex justify-content-start justify-content-md-center">
+                      Upload Image
+                    </Form.Label>
                   </div>
                   <div
                     className="col-12 col-md-8 mt-0 me-0 me-md-5 border d-flex flex-column align-items-center justify-content-center"
@@ -136,9 +148,9 @@ const AddTechnology = () => {
                         Upload Image / Icon
                       </h6>
                     </Form.Label>
-                    {technologyImage && (
+                    {data.image && (
                       <h6
-                        className={`text-center   text-primary ${styles.mdFont}`}
+                        className={`text-center text-primary ${styles.mdFont}`}
                         style={{ cursor: "pointer" }}
                         onClick={() => setImagePreview(true)}
                       >
@@ -152,20 +164,40 @@ const AddTechnology = () => {
                     hidden
                     type="file"
                     onChange={handleMedia}
-                    placeholder="Social Link Icon"
                     className="flex-grow-1 p-2"
                     required
                   />
                 </Form.Group>
+
+                {/* Image Alt */}
+                <Form.Group className="row form-group mt-1 mt-md-2">
+                  <div className="col-12 col-md-3">
+                    <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
+                      Image Alt
+                    </Form.Label>
+                  </div>
+                  <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter Image Alt..."
+                      value={data.alt}
+                      onChange={(e) => setData({ ...data, alt: e.target.value })}
+                      className="form-control form-control-lg form-input"
+                      required
+                    />
+                  </div>
+                </Form.Group>
+
+                {/* Action Buttons */}
                 <div className="row">
                   <div className="col-4 col-md-3"></div>
                   <div className="col-12 col-md-9 form-button">
                     <Button variant="secondary" type="button" className="btn form-cancel">
                       Cancel
                     </Button>
-                <Button variant="primary" type="submit" className="btn form-btn">
-                  Save
-                </Button>
+                    <Button variant="primary" type="submit" className="btn form-btn">
+                      Save
+                    </Button>
                   </div>
                 </div>
               </Form>

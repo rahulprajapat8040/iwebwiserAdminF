@@ -111,7 +111,7 @@ const Login = () => {
                     {/* Submit button */}
                     <Button
                       type="submit"
-                      className={`px-3 py-1 btn `}
+                      className={` form-btn  `}
                     >
                       Sign In
                     </Button>

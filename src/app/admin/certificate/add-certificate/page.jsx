@@ -15,6 +15,7 @@ const AddCertificate = () => {
   const router = useRouter();
   const [certificateTitle, setcertificateTitle] = useState("");
   const [certificateImage, setcertificateImage] = useState(null);
+  const [alt, setAlt] = useState("")
   const [imagePreview, setImagePreview] = useState(false);
 
   // HANDLE IMAGE UPLOAD
@@ -43,11 +44,13 @@ const AddCertificate = () => {
       const response = await axios.post(Apis.createCertificate, {
         title: certificateTitle,
         image: certificateImage,
+        alt
       });
       toast.success(response.data.message);
       // Clear the input fields and increment the index for the next branch
       setcertificateTitle("");
       setcertificateImage(null);
+      setAlt("")
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -164,7 +167,23 @@ const AddCertificate = () => {
                     required
                   />
                 </Form.Group>
-
+                <Form.Group className="row form-group mt-1 mt-md-2">
+                  <div className="col-12 col-md-3">
+                    <Form.Label className={`col-form-label form-label d-flex justify-content-left justify-content-md-center`}>
+                      Image Alt
+                    </Form.Label>
+                  </div>
+                  <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
+                    <Form.Control
+                      type="text"
+                      name="alt"
+                      placeholder="Image Alt"
+                      value={alt}
+                      onChange={(e) => setAlt(e.target.value)}
+                      className={`form-control form-control-lg form-input`}
+                    />
+                  </div>
+                </Form.Group>
                 <div className="row form-group mt-1 mt-md-2 ms-md-5">
                   <div className="col-4 col-md-3"></div>
                   <div className="col-12 col-md-9 form-button">

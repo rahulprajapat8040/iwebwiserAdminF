@@ -41,6 +41,10 @@ const UpdateCaseStudy = () => {
         fetchIndustries()
     }, [])
 
+    // META TAGS 
+    const [ metas , setMetas ] = useState("")
+    // ------
+
     const [selectedIndustry, setSelectedIndustry] = useState(null);
     const [caseStudy, setCaseStudy] = useState({
         productName: "",
@@ -53,6 +57,8 @@ const UpdateCaseStudy = () => {
         buttonLinks: [""],
         image: "",
         mainImage: "",
+        imageAlt: "",
+        mainImageAlt: "",
     });
 
     const [userCertificate, setUserCertificate] = useState({
@@ -62,12 +68,14 @@ const UpdateCaseStudy = () => {
         challeng: "",
         solution: "",
         image: "",
+        alt: ""
     });
     const [addImpact, setAddImpact] = useState({
         title: "",
         businessImpact: "",
         userImpact: "",
         image: "",
+        alt: ""
     });
 
     useEffect(() => {
@@ -85,14 +93,39 @@ const UpdateCaseStudy = () => {
         try {
             const response = await axios.get(`${Apis.getCaseStudyById}/${id}`);
             const data = response.data.data;
-            setCaseStudy(data.addCaseStudy);
-            setUserCertificate(data.userCertificate);
-            setChallenges(data.challenges);
-            setAddImpact(data.impact);
+            setCaseStudy({
+                productName: data.addCaseStudy.productName,
+                productSlogan: data.addCaseStudy.productSlogan,
+                short_description: data.addCaseStudy.short_description,
+                full_description: data.addCaseStudy.full_description,
+                country: data.addCaseStudy.country,
+                platformUsers: data.addCaseStudy.platformUsers,
+                downloads: data.addCaseStudy.downloads,
+                buttonLinks: data.addCaseStudy.buttonLinks,
+                image: data.addCaseStudy.image,
+                mainImage: data.addCaseStudy.mainImage,
+                imageAlt: data.addCaseStudy.imageAlt,
+                mainImageAlt: data.addCaseStudy.mainImageAlt,
+            });
+            setUserCertificate(data.userCertificate || { certificateImage: [] });
+            setChallenges({
+                challeng: data.challenges.challeng,
+                solution: data.challenges.solution,
+                image: data.challenges.image,
+                alt: data.challenges.alt,
+            });
+            setAddImpact({
+                title: data.impact.title,
+                businessImpact: data.impact.businessImpact,
+                userImpact: data.impact.userImpact,
+                image: data.impact.image,
+                alt: data.impact.alt,
+            });
             setPhases(data.system_phase);
             setSelectedIndustry(data.industryId);
             setSlug(data.slug);
             setAdditionalInfo(data.addtional_information || [{ title: '', description: '' }]);
+            setMetas(data.metas)
         } catch (error) {
             console.error("Error fetching case study:", error);
         }
@@ -361,13 +394,24 @@ const UpdateCaseStudy = () => {
         try {
             const res = await axios.put(`${Apis.updateCaseStudy}/${id}`, {
                 slug: slug,
-                addCaseStudy: caseStudy,
+                addCaseStudy: {
+                    ...caseStudy,
+                    imageAlt: caseStudy.imageAlt,
+                    mainImageAlt: caseStudy.mainImageAlt,
+                },
                 userCertificate: userCertificate,
-                challenges: Challenges,
-                impact: addImpact,
+                challenges: {
+                    ...Challenges,
+                    alt: Challenges.alt,
+                },
+                impact: {
+                    ...addImpact,
+                    alt: addImpact.alt,
+                },
                 system_phase: phases,
                 industryId: selectedIndustry,
-                addtional_information: additionalInfo
+                addtional_information: additionalInfo,
+                metas: metas
             });
             toast.success(res.data.message);
         } catch (error) {
@@ -672,6 +716,25 @@ const UpdateCaseStudy = () => {
                                         </div>
                                     </div>
                                 </Form.Group>
+                                <Form.Group className="mb-3 row form-group mt-1 mt-md-2" controlId="imageAlt">
+                                    <Form.Label column md={3} className={`col-form-label text-nowrap form-label d-flex justify-content-start justify-content-md-center`}>
+                                        Image Alt
+                                    </Form.Label>
+                                    <div className="col-12 col-md-8 mt-0">
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Image Alt"
+                                            className={`form-control form-control-lg form-input`}
+                                            value={caseStudy.imageAlt}
+                                            onChange={(e) =>
+                                                setCaseStudy((prevCaseStudy) => ({
+                                                    ...prevCaseStudy,
+                                                    imageAlt: e.target.value,
+                                                }))
+                                            }
+                                        />
+                                    </div>
+                                </Form.Group>
                                 <Form.Group className="row form-group" controlId="uploadMainImage">
                                     <div className="col-12 col-md-4">
                                         <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
@@ -702,6 +765,26 @@ const UpdateCaseStudy = () => {
                                                 </div>
                                             )}
                                         </div>
+                                    </div>
+                                </Form.Group>
+                                <Form.Group className="mb-3 row form-group mt-1 mt-md-2" controlId="main-img-alt">
+                                    <Form.Label column md={3} className={`col-form-label text-nowrap form-label d-flex justify-content-start justify-content-md-center`}>
+                                        Main Image Alt
+                                    </Form.Label>
+                                    <div className="col-12 col-md-8 mt-0">
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Main Image Alt"
+                                            className={`form-control form-control-lg form-input`}
+                                            value={caseStudy.mainImageAlt}
+                                            onChange={(e) =>
+                                                setCaseStudy((prevCaseStudy) => ({
+                                                    ...prevCaseStudy,
+                                                    mainImageAlt: e.target.value,
+                                                }))
+                                            }
+                                            required
+                                        />
                                     </div>
                                 </Form.Group>
                             </Form>
@@ -890,6 +973,26 @@ const UpdateCaseStudy = () => {
                                     </div>
                                 </Form.Group>
 
+                                <Form.Group className="mb-3 row form-group mt-1 mt-md-2" controlId="challeng-alt">
+                                    <Form.Label column md={3} className={`col-form-label text-nowrap form-label d-flex justify-content-start justify-content-md-center`}>
+                                        Image Alt
+                                    </Form.Label>
+                                    <div className="col-12 col-md-8 mt-0">
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Image Alt"
+                                            className={`form-control form-control-lg form-input`}
+                                            value={Challenges.alt}
+                                            onChange={(e) =>
+                                                setChallenges((prevChallenges) => ({
+                                                    ...prevChallenges,
+                                                    alt: e.target.value,
+                                                }))
+                                            }
+                                        />
+                                    </div>
+                                </Form.Group>
+
                                 <Form.Group className="row form-group">
                                     <div className="col-12 col-md-4">
                                         <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
@@ -1015,6 +1118,26 @@ const UpdateCaseStudy = () => {
                                                 }))}
                                             />
                                         )}
+                                    </div>
+                                </Form.Group>
+
+                                <Form.Group className="mb-3 row form-group mt-1 mt-md-2" controlId="impact-alt">
+                                    <Form.Label column md={3} className={`col-form-label text-nowrap form-label d-flex justify-content-start justify-content-md-center`}>
+                                        Image Alt
+                                    </Form.Label>
+                                    <div className="col-12 col-md-8 mt-0">
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Image Alt"
+                                            className={`form-control form-control-lg form-input`}
+                                            value={addImpact.alt}
+                                            onChange={(e) =>
+                                                setAddImpact((prevAddImpact) => ({
+                                                    ...prevAddImpact,
+                                                    alt: e.target.value,
+                                                }))
+                                            }
+                                        />
                                     </div>
                                 </Form.Group>
 
@@ -1154,6 +1277,44 @@ const UpdateCaseStudy = () => {
                             </Form>
                         </div>
                     </div>
+                    <div className="card mt-3">
+            {/* <!-- card header start here  --> */}
+            <div className="card-header">
+              <div
+                className="card-title d-flex justify-content-between align-items-center"
+              >
+                <h2>Metas</h2>
+                {/* <!-- <a href="add_header.html" className="btn sub_btn">ADD</a> --> */}
+              </div>
+            </div>
+            <div className="card-body">
+              <Form className="upload-form">
+                <div className="mb-3 pb-3">
+
+
+                  <div className="mb-4 border-bottom pb-3">
+                    <Form.Group className="row form-group mt-3">
+                      <div className="col-12 col-md-4">
+                        <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                          Meta Tags
+                        </Form.Label>
+                      </div>
+                      <div className="col-12 col-md-8 mt-0">
+                        <Form.Control
+                          as="textarea"
+                          rows={4}
+                          value={metas}
+                          onChange={(e) => setMetas(e.target.value)}
+                          placeholder="Write Meta tags here..."
+                          className={`form-control form-control-lg form-textbox`}
+                        />
+                      </div>
+                    </Form.Group>
+                  </div>
+                </div>
+              </Form>
+            </div>
+          </div>
                 </div>
 
                 {/* Submit Section */}

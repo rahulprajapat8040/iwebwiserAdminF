@@ -93,7 +93,8 @@ const AddServiceDetails = () => {
         {
             title: "",
             description: "",
-            image: ""
+            image: "",
+            alt:""
         }
     ])
 
@@ -107,7 +108,9 @@ const AddServiceDetails = () => {
         const updatedSteps = [...steps]
         updatedSteps.push({
             title: "",
-            description: ""
+            description: "",
+            image: "",
+            alt: ""
         })
         setSteps(updatedSteps)
     }
@@ -150,6 +153,9 @@ const AddServiceDetails = () => {
         setTechSections(updatedSections);
     };
 
+    // METAS 
+    const [metas, setMetas] = useState('')
+
     // ADD CASE 
     const handleAddServiceDetail = async () => {
         try {
@@ -178,6 +184,7 @@ const AddServiceDetails = () => {
                 stepsWeFollow: steps,
                 serviceSolution: serviceSolution,
                 techWeUse: techSections,
+                metas: metas
             };
 
             const res = await axios.post(`${Apis.AddServiceDetails}`, serviceData);
@@ -481,6 +488,7 @@ const AddServiceDetails = () => {
                             </Form>
                         </div>
                     </div>
+
                     <div className="card mt-3">
                         {/* <!-- card header start here  --> */}
                         <div className="card-header">
@@ -569,8 +577,65 @@ const AddServiceDetails = () => {
                                                     </div>
                                                 </div>
                                             </Form.Group>
+                                            <Form.Group className="row form-group" controlId="serviceSectionTitle">
+                                                <div className="col-12 col-md-4">
+
+                                                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                        Heading
+                                                    </Form.Label>
+                                                </div>
+
+                                                <div className="col-12 col-md-8 mt-0">
+                                                    <Form.Control
+                                                        type="text"
+                                                        value={steps.alt}
+                                                        onChange={(e) => handleStepsWeFollowChange(index, 'alt', e.target.value)}
+                                                        placeholder="Service Section Title..."
+                                                        required
+                                                        className={`form-control form-control-lg form-input`}
+                                                    />
+                                                </div>
+                                            </Form.Group>
                                         </div>
                                     ))}
+                                </div>
+                            </Form>
+                        </div>
+                    </div>
+                    <div className="card mt-3">
+                        {/* <!-- card header start here  --> */}
+                        <div className="card-header">
+                            <div
+                                className="card-title d-flex justify-content-between align-items-center"
+                            >
+                                <h2>Metas</h2>
+                                {/* <!-- <a href="add_header.html" className="btn sub_btn">ADD</a> --> */}
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <Form className="upload-form">
+                                <div className="mb-3 pb-3">
+
+
+                                    <div className="mb-4 border-bottom pb-3">
+                                        <Form.Group className="row form-group mt-3">
+                                            <div className="col-12 col-md-4">
+                                                <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`}>
+                                                    Metas
+                                                </Form.Label>
+                                            </div>
+                                            <div className="col-12 col-md-8 mt-0">
+                                                <Form.Control
+                                                    as="textarea"
+                                                    rows={4}
+                                                    value={metas}
+                                                    onChange={(e) => setMetas(e.target.value)}
+                                                    placeholder="Write Meta tags here..."
+                                                    className={`form-control form-control-lg form-textbox`}
+                                                />
+                                            </div>
+                                        </Form.Group>
+                                    </div>
                                 </div>
                             </Form>
                         </div>

@@ -16,14 +16,17 @@ import { getAllFields } from "@/lib/redux/features/GetAllFields";
 const AddService = () => {
   const router = useRouter();
   const dispatch = useDispatch()
-  const [title, setTitle] = useState("");
-  const [short_description, setShortDescription] = useState("");
-  const [long_description, setLongDescription] = useState("");
-  const [button_link, setButtonLink] = useState("");
-  const [image, setImage] = useState(null);
+  const [data, setData] = useState({
+    title: "",
+    short_description: "",
+    long_description: "",
+    button_link: "",
+    image: null,
+    alt: "",
+    field_id: ""
+  });
   const [imagePreview, setImagePreview] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [selectedField, setSelectedField] = useState("");
   const { fields } = useSelector((state) => state.getAllFields);
 
   useEffect(() => {
@@ -41,7 +44,7 @@ const AddService = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setImage(res.data.url);
+      setData({ ...data, image: res.data.url });
       toast.success("Image Uploaded Successfully");
     } catch (error) {
       toast.error(error.response?.data?.message || "Image upload failed");
@@ -52,22 +55,18 @@ const AddService = () => {
   const handleAddService = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(Apis.createService, {
-        title,
-        short_description,
-        long_description,
-        button_link,
-        image,
-        field_id: selectedField // Add field_id to request
-      });
+      const response = await axios.post(Apis.createService, data);
       toast.success(response.data.message);
       // Clear the input fields
-      setTitle("");
-      setShortDescription("");
-      setLongDescription("");
-      setButtonLink("");
-      setImage(null);
-      setSelectedField(""); // Clear field selection
+      setData({
+        title: "",
+        short_description: "",
+        long_description: "",
+        button_link: "",
+        image: null,
+        alt: "",
+        field_id: ""
+      });
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add service");
     }
@@ -78,7 +77,7 @@ const AddService = () => {
       <ToastContainer />
       {imagePreview && (
         <ImagePreview
-          image={image}
+          image={data.image}
           setImagePreview={setImagePreview}
         />
       )}
@@ -121,14 +120,14 @@ const AddService = () => {
               <Form.Group className="row form-group mt-1 mt-md-2">
                 <div className="col-12 col-md-3">
                   <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
-                     Title
+                    Title
                   </Form.Label>
                 </div>
                 <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
                   <Form.Control
                     type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={data.title}
+                    onChange={(e) => setData({ ...data, title: e.target.value })}
                     placeholder="Enter Title.."
                     className="form-control form-control-lg form-input"
                   />
@@ -143,8 +142,8 @@ const AddService = () => {
                 </div>
                 <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
                   <Form.Select
-                    value={selectedField}
-                    onChange={(e) => setSelectedField(e.target.value)}
+                    value={data.field_id}
+                    onChange={(e) => setData({ ...data, field_id: e.target.value })}
                     className="form-control form-control-lg form-input"
                     required
                   >
@@ -168,15 +167,20 @@ const AddService = () => {
                   {isClient && (
                     <Editor
                       apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
-                      value={short_description}
+                      value={data.short_description}
                       init={{
                         height: 250,
                         menubar: false,
-                        plugins: ["link", "lists", "image", "media"],
-                        toolbar:
-                          "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link",
+                        plugins: [
+                          'autolink',
+                          'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+                          'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                        ],
+                        toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
+                          'alignleft aligncenter alignright alignjustify | ' +
+                          'bullist numlist  outdent indent | removeformat |  code table help'
                       }}
-                      onEditorChange={(content) => setShortDescription(content)}
+                      onEditorChange={(content) => setData({ ...data, short_description: content })}
                     />
                   )}
                 </div>
@@ -192,7 +196,7 @@ const AddService = () => {
                   {isClient && (
                     <Editor
                       apiKey="an08ruvf6el10km47b0qr7vkwpoldafttauwj424r7y8y5e2"
-                      value={long_description}
+                      value={data.long_description}
                       init={{
                         height: 250,
                         menubar: false,
@@ -200,7 +204,7 @@ const AddService = () => {
                         toolbar:
                           "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link",
                       }}
-                      onEditorChange={(content) => setLongDescription(content)}
+                      onEditorChange={(content) => setData({ ...data, long_description: content })}
                     />
                   )}
                 </div>
@@ -217,8 +221,8 @@ const AddService = () => {
                     type="text"
                     placeholder="Enter Button Link..."
                     className="form-control form-control-lg form-input"
-                    value={button_link}
-                    onChange={(e) => setButtonLink(e.target.value)}
+                    value={data.button_link}
+                    onChange={(e) => setData({ ...data, button_link: e.target.value })}
                     style={{ fontSize: "13px" }}
                   />
                 </div>
@@ -247,7 +251,7 @@ const AddService = () => {
                         Upload Image / Icon
                       </h6>
                     </Form.Label>
-                    {image && (
+                    {data.image && (
                       <h6
                         className={`text-center text-primary ${styles.mdFont}`}
                         style={{ cursor: "pointer" }}
@@ -266,7 +270,22 @@ const AddService = () => {
                   className="flex-grow-1 p-2"
                 />
               </Form.Group>
-
+              <Form.Group className="row form-group mt-1 mt-md-2">
+                <div className="col-12 col-md-3">
+                  <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
+                    Alt Image
+                  </Form.Label>
+                </div>
+                <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
+                  <Form.Control
+                    type="text"
+                    value={data.alt}
+                    onChange={(e) => setData({ ...data, alt: e.target.value })}
+                    placeholder="Enter Image Alt.."
+                    className="form-control form-control-lg form-input"
+                  />
+                </div>
+              </Form.Group>
               <div className="row">
                 <div className="col-4 col-md-3"></div>
                 <div className="col-12 col-md-9 form-button">

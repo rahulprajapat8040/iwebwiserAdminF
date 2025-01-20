@@ -24,7 +24,7 @@ import { useSelector } from "react-redux";
 
 const AdminDrawer = () => {
   const pathname = usePathname();
-  const isActive = (path) => pathname.includes(path);
+  const isActive = (path) => pathname.includes(path) || pathname === path;
   const { showDrawer } = useSelector((state) => state.hideShowDrawer);
 
   const [openMenus, setOpenMenus] = useState(null);
@@ -45,7 +45,7 @@ const AdminDrawer = () => {
     },
     {
       title: "Social Links",
-      link: "/admin/footer/social-media-list",
+      link: "/admin/social-media-list",
       icon: <CiShare2 size={25} />,
     },
     {
@@ -280,7 +280,7 @@ const AdminDrawer = () => {
                 ) : (
                   <Link
                     href={item.link}
-                    className={`d-flex align-items-center gap-3 pb-1 ${isActive(item.title) ? "text-primary" : "text-secondary"
+                    className={`d-flex align-items-center gap-3 pb-1 ${isActive(item.link) ? "text-primary" : "text-secondary"
                       }`}
                     style={{ fontSize: "14px" }}
                   >

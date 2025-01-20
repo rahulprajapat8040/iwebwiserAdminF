@@ -19,6 +19,8 @@ const EditField = ({ show, setShowEdit, slectedField }) => {
         setButtonText(slectedField?.buttonText || "");
         setButtonLink(slectedField?.buttonLink || "");
         setFieldImage(slectedField?.image || "");
+        setAlt(slectedField?.alt || "")
+        setMetas(slectedField?.metas || "")
     }, [slectedField, dispatch]);
 
 
@@ -29,6 +31,8 @@ const EditField = ({ show, setShowEdit, slectedField }) => {
     const [shortDescription, setShortDescription] = useState(slectedField?.short_description);
     const [description, setDescription] = useState(slectedField?.description);
     const [fieldImage, setFieldImage] = useState(slectedField?.image);
+    const [alt, setAlt] = useState(slectedField?.alt)
+    const [metas, setMetas] = useState(slectedField?.metas)
 
     // HANDLE IMAGE UPLOAD
     const handleMedia = async (e) => {
@@ -60,6 +64,8 @@ const EditField = ({ show, setShowEdit, slectedField }) => {
                     buttonText: buttonText,
                     buttonLink: buttonLink,
                     image: fieldImage,
+                    alt: alt,
+                    metas: metas
                 }
             );
             dispatch(getAllFields());
@@ -140,13 +146,13 @@ const EditField = ({ show, setShowEdit, slectedField }) => {
                                 height: 250,
                                 menubar: false,
                                 plugins: [
-                                    'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+                                    'autolink',
                                     'lists', 'link', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                                    'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
+                                    'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount',
                                 ],
                                 toolbar: 'undo redo | casechange blocks | bold italic backcolor forecolor| ' +
                                     'alignleft aligncenter alignright alignjustify | ' +
-                                    'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+                                    'bullist numlist  outdent indent | removeformat |  code table help'
                             }}
                             onEditorChange={(content) => setDescription(content)}
                         />
@@ -173,6 +179,33 @@ const EditField = ({ show, setShowEdit, slectedField }) => {
                             placeholder="Enter Button Link"
                             value={buttonLink}
                             onChange={(e) => setButtonLink(e.target.value)}
+                            className="flex-grow-1 p-2 w-75"
+                            required
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-4 d-flex align-items-center">
+                        <Form.Label className="w-25 m-0">
+                            Image Alt
+                        </Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter Image Alt"
+                            value={alt}
+                            onChange={(e) => setAlt(e.target.value)}
+                            className="flex-grow-1 p-2 w-75"
+                            required
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-4 d-flex align-items-center">
+                        <Form.Label className="w-25 m-0">
+                            Meta Tags
+                        </Form.Label>
+                        <Form.Control
+                            as="textarea"
+                            rows={5}
+                            placeholder="Enter Meta tags"
+                            value={metas}
+                            onChange={(e) => setMetas(e.target.value)}
                             className="flex-grow-1 p-2 w-75"
                             required
                         />

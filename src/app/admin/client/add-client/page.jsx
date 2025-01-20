@@ -13,8 +13,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AddClient = () => {
   const router = useRouter();
-  const [clientName, setClientName] = useState("");
-  const [clientImageUrl, setClientImageUrl] = useState(null);
+
+  const [formData, setFormData] = useState({
+    clientName: "",
+    clientImageUrl: null,
+    alt: "",
+  });
+
   const [imagePreview, setImagePreview] = useState(false);
 
   const handleMedia = async (e) => {
@@ -27,22 +32,28 @@ const AddClient = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setClientImageUrl(res.data.url);
+      setFormData((prev) => ({ ...prev, clientImageUrl: res.data.url }));
       toast.success("Client image uploaded successfully");
     } catch (err) {
       console.log(err);
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const createClient = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post(Apis.createClient, {
-        title: clientName,
-        image: clientImageUrl,
+        title: formData.clientName,
+        image: formData.clientImageUrl,
+        alt: formData.alt,
       });
-      setClientImageUrl("");
-      setClientName("");
+
+      setFormData({ clientName: "", clientImageUrl: null, alt: "" });
       toast.success(res.data.message);
     } catch (err) {
       toast.error(err.response.data.message);
@@ -55,7 +66,7 @@ const AddClient = () => {
       <ToastContainer />
       {imagePreview && (
         <ImagePreview
-          image={clientImageUrl}
+          image={formData.clientImageUrl}
           setImagePreview={setImagePreview}
         />
       )}
@@ -88,8 +99,9 @@ const AddClient = () => {
                   <Form.Control
                     type="text"
                     placeholder="Enter Client Name..."
-                    value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
+                    name="clientName"
+                    value={formData.clientName}
+                    onChange={handleChange}
                     className="form-control form-control-lg form-input"
                     required
                   />
@@ -119,7 +131,7 @@ const AddClient = () => {
                         Upload Image / Icon
                       </h6>
                     </Form.Label>
-                    {clientImageUrl && (
+                    {formData.clientImageUrl && (
                       <h6
                         className={`text-center text-primary ${styles.mdFont}`}
                         style={{ cursor: "pointer" }}
@@ -139,6 +151,24 @@ const AddClient = () => {
                   className="flex-grow-1 p-2"
                   required
                 />
+              </Form.Group>
+              <Form.Group className="row form-group mt-1 mt-md-2">
+                <div className="col-12 col-md-3">
+                  <Form.Label className="col-form-label form-label d-flex justify-content-left justify-content-md-center">
+                    Image Alt
+                  </Form.Label>
+                </div>
+                <div className="col-12 col-md-8 me-5 mt-0">
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Image Alt..."
+                    name="alt"
+                    value={formData.alt}
+                    onChange={handleChange}
+                    className="form-control form-control-lg form-input"
+                    required
+                  />
+                </div>
               </Form.Group>
               <div className="row">
                 <div className="col-4 col-md-3"></div>

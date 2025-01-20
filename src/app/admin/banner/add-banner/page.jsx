@@ -12,10 +12,13 @@ import { BsCloudUpload } from "react-icons/bs";
 import ImagePreview from "@/components/Modals/ImagePreview";
 
 const AddSection = () => {
-  const [bannerTitle, setBannerTitle] = useState("");
-  const [bannerDescription, setBannerDescription] = useState("");
-  const [buttonLink, setButtonLink] = useState("");
-  const [bannerImgUrl, setBannerImgUrl] = useState("");
+  const [formData, setFormData] = useState({
+    bannerTitle: "",
+    bannerDescription: "",
+    buttonLink: "",
+    bannerImgUrl: "",
+    alt: ""
+  });
   const [imagePreview, setImagePreview] = useState(false);
   const router = useRouter();
 
@@ -30,7 +33,10 @@ const AddSection = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setBannerImgUrl(res.data.url);
+      setFormData((prevData) => ({
+        ...prevData,
+        bannerImgUrl: res.data.url
+      }));
     } catch (error) {
       console.log(error);
     }
@@ -41,17 +47,21 @@ const AddSection = () => {
     e.preventDefault();
     try {
       const response = await axios.post(Apis.createBanner, {
-        title: bannerTitle,
-        description: bannerDescription,
-        button_link: buttonLink,
-        image: bannerImgUrl,
+        title: formData.bannerTitle,
+        description: formData.bannerDescription,
+        button_link: formData.buttonLink,
+        image: formData.bannerImgUrl,
+        alt: formData.alt
       });
       toast.success(response.data.message);
-      // Clear the input fields and increment the index for the next branch
-      setBannerTitle("");
-      setBannerDescription("");
-      setButtonLink("");
-      setBannerImgUrl("");
+      // Clear the input fields and reset the form data
+      setFormData({
+        bannerTitle: "",
+        bannerDescription: "",
+        buttonLink: "",
+        bannerImgUrl: "",
+        alt: ""
+      });
       setImagePreview(false);
     } catch (error) {
       toast.error(error.response.data.message);
@@ -62,7 +72,7 @@ const AddSection = () => {
     <>
       <ToastContainer />
       {imagePreview && (
-        <ImagePreview image={bannerImgUrl} setImagePreview={setImagePreview} />
+        <ImagePreview image={formData.bannerImgUrl} setImagePreview={setImagePreview} />
       )}
       <div className="main-data">
         <div className="dash-head">
@@ -111,8 +121,8 @@ const AddSection = () => {
                     <Form.Control
                       type="text"
                       placeholder="Enter Banner Title..."
-                      value={bannerTitle}
-                      onChange={(e) => setBannerTitle(e.target.value)}
+                      value={formData.bannerTitle}
+                      onChange={(e) => setFormData({ ...formData, bannerTitle: e.target.value })}
                       className={`form-control form-control-lg form-input `}
                       required
                     />
@@ -129,8 +139,8 @@ const AddSection = () => {
                       as="textarea"
                       rows={4}
                       placeholder="Enter Your Banner Description Here..."
-                      value={bannerDescription}
-                      onChange={(e) => setBannerDescription(e.target.value)}
+                      value={formData.bannerDescription}
+                      onChange={(e) => setFormData({ ...formData, bannerDescription: e.target.value })}
                       className={`form-control form-control-lg form-textbox`}
                     />
                   </div>
@@ -145,8 +155,8 @@ const AddSection = () => {
                     <Form.Control
                       type="text"
                       placeholder="Enter Button Link..."
-                      value={buttonLink}
-                      onChange={(e) => setButtonLink(e.target.value)}
+                      value={formData.buttonLink}
+                      onChange={(e) => setFormData({ ...formData, buttonLink: e.target.value })}
                       className={`form-control form-control-lg form-input`}
                       required
                     />
@@ -173,7 +183,7 @@ const AddSection = () => {
                           Upload Image / Icon
                         </h6>
                       </Form.Label>
-                      {bannerImgUrl && (
+                      {formData.bannerImgUrl && (
                         <h6
                           className={`text-center   text-primary ${styles.mdFont}`}
                           style={{ cursor: "pointer" }}
@@ -193,6 +203,22 @@ const AddSection = () => {
                     placeholder="Social Link Icon"
                     className="flex-grow-1 p-2"
                   />
+                </Form.Group>
+                <Form.Group className="row form-group mt-1 mt-md-2 px-md-4">
+                  <div className="col-12 col-md-3">
+                    <Form.Label className={`col-form-label form-label d-flex justify-content-start justify-content-md-center`} >
+                      Image Alt
+                    </Form.Label>
+                  </div>
+                  <div className="col-12 col-md-8 mt-0 me-0 me-md-5">
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter Image Alt"
+                      value={formData.alt}
+                      onChange={(e) => setFormData({ ...formData, alt: e.target.value })}
+                      className={`form-control  form-control-lg form-input `}
+                    />
+                  </div>
                 </Form.Group>
                 <div className="row">
                   <div className="col-4 col-md-3"></div>
